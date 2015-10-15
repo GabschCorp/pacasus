@@ -3,4 +3,8 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Login</string>
+    <string name="res_lblUsername">Benutzername</string>
+    <string name="res_lblPassword">Passwort</string>
+    <string name="res_btnLogin">Login</string>
 </resources>
