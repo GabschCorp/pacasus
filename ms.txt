@@ -1,16 +1,17 @@
 1: Login mit DB-Anbindung
 2: GameActivity
-2: Pacman zum laufen bringen, ohne Karte
+2: Pacman mit Animation bewegen, ohne Karte
 2: Bauen einer "einzeiligen" Karte
-        Laufen auf dieser Karte (
+        Bewegen auf dieser Karte (
 4: komplette Karte
         + Map definieren
         + Laufen auf dieser Karte (
-        + mit Geister
+        + mit Geister (Zufallsbasiert)
         + Punkte
         + Pillen
 [5: Anständige Grafiken]
-6: Steuerung mit Wischen
+6: KI - Für Geister
+7: Steuerung mit Wischen
 
 
 
