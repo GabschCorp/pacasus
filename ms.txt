@@ -18,6 +18,10 @@
 * Route-Stack (Speicherung mehrerer Richtungen, welche nacheinander abgearbeitet werden)
 * Früchte
 * Geister-logik
+    * Inky
+    * Blinky
+    * Clyde
+    * Pinky
 
 
 ====
