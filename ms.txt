@@ -1,22 +1,33 @@
 1: Login mit DB-Anbindung
 2: GameActivity
-3:
-2: Pacman zum laufen bringe, ohne Karte
+2: Pacman zum laufen bringen, ohne Karte
 2: Bauen einer "einzeiligen" Karte
-        Laufen auf dieser Karte
+        Laufen auf dieser Karte (
 4: komplette Karte
-        + Laufen auf dieser Karte
+        + Map definieren
+        + Laufen auf dieser Karte (
         + mit Geister
+        + Punkte
+        + Pillen
 [5: Anständige Grafiken]
 6: Steuerung mit Wischen
 
 
 
-
 [Open End]
 * Route-Stack (Speicherung mehrerer Richtungen, welche nacheinander abgearbeitet werden)
-*
+* Früchte
+* Geister-logik
+
+
+====
+---+
+===|
 
 
 
+Struktur
+app
+ - *Activity
+ -
 
