@@ -10,6 +10,11 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import de.berufsschule_freising.pacasus.model.dataContext.DataContext;
+import de.berufsschule_freising.pacasus.model.entity.User;
+
 public class LoginActivity extends Activity implements View.OnClickListener {
 
 	private Button btnLogin;
@@ -28,21 +33,37 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		this.txtPassword = (EditText)this.findViewById(R.id.txtPassword);
 		// add Eventhandler
 		this.btnLogin.setOnClickListener(this);
+
+		// Fill Database with Inital User
+		User user = new User();
+		user.setID(1);
+		user.setName("admin");
+		user.setPassword("123");
+		DataContext db = new DataContext(this);
+		db.addUser(user);
+
 	}
 
 	public void onClick(View v){
 		// TODO: Mit DB abfragen
-		if (this.txtUsername.getText().toString().equals("admin")){
-			if (this.txtPassword.getText().toString().equals("123")){
-				Toast.makeText(this, "Super! Login erfolgreich :D", Toast.LENGTH_LONG).show();
-				Intent mainIntent = new Intent(this, MainActivity.class);
-				this.startActivity(mainIntent);
-			}else {
-				Toast.makeText(this, "Falsche Zugangsdaten; Passwort ist falsch!", Toast.LENGTH_LONG).show();
+		DataContext db = new DataContext(this);
+		ArrayList<User> userList = db.fetchUser();
+
+		for (User user : userList){
+			if (this.txtUsername.getText().toString().equals(user.getName())){
+				if (this.txtPassword.getText().toString().equals(user.getPassword())){
+					Toast.makeText(this, "Super! Login erfolgreich :D", Toast.LENGTH_LONG).show();
+					Intent mainIntent = new Intent(this, MainActivity.class);
+					this.startActivity(mainIntent);
+				}else {
+					Toast.makeText(this, "Falsche Zugangsdaten; Passwort ist falsch!", Toast.LENGTH_LONG).show();
+				}
+			} else {
+				continue;
 			}
-		} else {
-			Toast.makeText(this, "Falsche Zugangsdaten; Benutzername ist falsch!", Toast.LENGTH_LONG).show();
 		}
+
+		Toast.makeText(this, "Falsche Zugangsdaten; Benutzername ist falsch oder unbekannt!", Toast.LENGTH_LONG).show();
 	}
 
 	@Override
