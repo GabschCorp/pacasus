@@ -9,6 +9,7 @@
         + mit Geister (Zufallsbasiert)
         + Punkte
         + Pillen
+        + Früchte
 [5: Anständige Grafiken]
 6: KI - Für Geister
 7: Steuerung mit Wischen
@@ -17,7 +18,6 @@
 
 [Open End]
 * Route-Stack (Speicherung mehrerer Richtungen, welche nacheinander abgearbeitet werden)
-* Früchte
 * Geister-logik
                * Inky
                * Blinky
