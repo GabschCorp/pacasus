@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.berufsschule_freising.pacasus.model.dataContext.DataContext;
 import de.berufsschule_freising.pacasus.model.entity.User;
@@ -43,28 +44,30 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 			db.addUser(user);
 		}
 		catch (Exception ex) {
-			throw ex;
+			//TODO: Exception handling
 		}
 	}
 
 	public void onClick(View v){
 		// TODO: Mit DB abfragen
-		ArrayList<User> userList;
+		List<User> userList = null;
 		try(DataContext db = new DataContext(this)) {
 			userList = db.fetchUser();
 		}
 		catch(Exception ex) {
-			throw ex;
+			//TODO: Exception handling
 		}
-
-		for (User user : userList){
-			if (this.txtUsername.getText().toString().equals(user.getName())){
-				if (this.txtPassword.getText().toString().equals(user.getPassword())){
-					Toast.makeText(this, "Super! Login erfolgreich :D", Toast.LENGTH_LONG).show();
-					Intent mainIntent = new Intent(this, MainActivity.class);
-					this.startActivity(mainIntent);
-				}else {
-					Toast.makeText(this, "Falsche Zugangsdaten; Passwort ist falsch!", Toast.LENGTH_LONG).show();
+		if(userList != null) {
+			for (User user : userList) {
+				if (this.txtUsername.getText().toString().equals(user.getName())) {
+					if (this.txtPassword.getText().toString().equals(user.getPassword())) {
+						Toast.makeText(this, "Super! Login erfolgreich :D", Toast.LENGTH_LONG).show();
+						//Intent mainIntent = new Intent(this, MainActivity.class);
+						Intent mainIntent = new Intent(this, GameActivity.class);
+						this.startActivity(mainIntent);
+					} else {
+						Toast.makeText(this, "Falsche Zugangsdaten; Passwort ist falsch!", Toast.LENGTH_LONG).show();
+					}
 				}
 			}
 		}

@@ -46,15 +46,19 @@ public class DataContext extends SQLiteOpenHelper implements AutoCloseable {
 
 	}
 
-	public void addUser(User user){
-		SQLiteDatabase db = this.getWritableDatabase();
+	public void addUser(User user) throws Exception {
+		try(SQLiteDatabase db = this.getWritableDatabase()) {
 
-		ContentValues values = new ContentValues();
-		values.put("ID", user.getID());
-		values.put("login", user.getName());
-		values.put("password", user.getPassword());
+			ContentValues values = new ContentValues();
+			values.put("ID", user.getID());
+			values.put("login", user.getName());
+			values.put("password", user.getPassword());
 
-		db.insert(TABLE_USER, null, values);
+			db.insert(TABLE_USER, null, values);
+		}
+		catch (Exception ex){
+			throw ex;
+		}
 	}
 
 	public ArrayList<User> fetchUser(){
