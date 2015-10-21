@@ -3,6 +3,7 @@ package de.berufsschule_freising.pacasus;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.Console;
 import java.util.ArrayList;
 
 import de.berufsschule_freising.pacasus.model.dataContext.DataContext;
@@ -41,13 +43,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		user.setPassword("123");
 		DataContext db = new DataContext(this);
 		db.addUser(user);
-
 	}
 
 	public void onClick(View v){
 		// TODO: Mit DB abfragen
 		DataContext db = new DataContext(this);
 		ArrayList<User> userList = db.fetchUser();
+		// System.out.println(userList.size());
+		// Toast.makeText(this, userList.get(0).getName(), Toast.LENGTH_LONG).show();
 
 		for (User user : userList){
 			if (this.txtUsername.getText().toString().equals(user.getName())){
@@ -55,6 +58,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 					Toast.makeText(this, "Super! Login erfolgreich :D", Toast.LENGTH_LONG).show();
 					Intent mainIntent = new Intent(this, MainActivity.class);
 					this.startActivity(mainIntent);
+                    return;
 				}else {
 					Toast.makeText(this, "Falsche Zugangsdaten; Passwort ist falsch!", Toast.LENGTH_LONG).show();
 				}
