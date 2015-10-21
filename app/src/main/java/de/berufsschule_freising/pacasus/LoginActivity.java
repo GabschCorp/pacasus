@@ -3,7 +3,6 @@ package de.berufsschule_freising.pacasus;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.io.Console;
 import java.util.ArrayList;
 
 import de.berufsschule_freising.pacasus.model.dataContext.DataContext;
@@ -41,16 +39,22 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		user.setID(1);
 		user.setName("admin");
 		user.setPassword("123");
-		DataContext db = new DataContext(this);
-		db.addUser(user);
+		try(DataContext db = new DataContext(this)) {
+			db.addUser(user);
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
 	}
 
 	public void onClick(View v){
-		// TODO: Mit DB abfragen
-		DataContext db = new DataContext(this);
-		ArrayList<User> userList = db.fetchUser();
-		// System.out.println(userList.size());
-		// Toast.makeText(this, userList.get(0).getName(), Toast.LENGTH_LONG).show();
+		ArrayList<User> userList;
+		try(DataContext db = new DataContext(this)) {
+			userList = db.fetchUser();
+		}
+		catch(Exception ex) {
+			throw ex;
+		}
 
 		for (User user : userList){
 			if (this.txtUsername.getText().toString().equals(user.getName())){
@@ -62,8 +66,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 				}else {
 					Toast.makeText(this, "Falsche Zugangsdaten; Passwort ist falsch!", Toast.LENGTH_LONG).show();
 				}
-			} else {
-				continue;
 			}
 		}
 

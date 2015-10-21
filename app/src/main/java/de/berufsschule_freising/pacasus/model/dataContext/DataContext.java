@@ -19,7 +19,7 @@ import de.berufsschule_freising.pacasus.model.entity.User;
 /**
  * Created by Jooly on 16.10.2015.
  */
-public class DataContext extends SQLiteOpenHelper {
+public class DataContext extends SQLiteOpenHelper implements AutoCloseable {
 
 	protected static final String DATABASE_NAME = "pacasus";
 	protected static final String TABLE_USER = "user";
