@@ -49,7 +49,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 	}
 
 	public void onClick(View v){
-		// TODO: Mit DB abfragen
 		List<User> userList = null;
 		try(DataContext db = new DataContext(this)) {
 			userList = db.fetchUser();
@@ -57,14 +56,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		catch(Exception ex) {
 			//TODO: Exception handling
 		}
-		if(userList != null) {
+		if (userList != null) {
 			for (User user : userList) {
 				if (this.txtUsername.getText().toString().equals(user.getName())) {
 					if (this.txtPassword.getText().toString().equals(user.getPassword())) {
 						Toast.makeText(this, "Super! Login erfolgreich :D", Toast.LENGTH_LONG).show();
-						//Intent mainIntent = new Intent(this, MainActivity.class);
 						Intent mainIntent = new Intent(this, GameActivity.class);
 						this.startActivity(mainIntent);
+						return;
 					} else {
 						Toast.makeText(this, "Falsche Zugangsdaten; Passwort ist falsch!", Toast.LENGTH_LONG).show();
 					}
