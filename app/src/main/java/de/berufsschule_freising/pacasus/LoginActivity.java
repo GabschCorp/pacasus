@@ -39,15 +39,23 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		user.setID(1);
 		user.setName("admin");
 		user.setPassword("123");
-		DataContext db = new DataContext(this);
-		db.addUser(user);
-
+		try(DataContext db = new DataContext(this)) {
+			db.addUser(user);
+		}
+		catch (Exception ex) {
+			throw ex;
+		}
 	}
 
 	public void onClick(View v){
 		// TODO: Mit DB abfragen
-		DataContext db = new DataContext(this);
-		ArrayList<User> userList = db.fetchUser();
+		ArrayList<User> userList;
+		try(DataContext db = new DataContext(this)) {
+			userList = db.fetchUser();
+		}
+		catch(Exception ex) {
+			throw ex;
+		}
 
 		for (User user : userList){
 			if (this.txtUsername.getText().toString().equals(user.getName())){
@@ -58,8 +66,6 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 				}else {
 					Toast.makeText(this, "Falsche Zugangsdaten; Passwort ist falsch!", Toast.LENGTH_LONG).show();
 				}
-			} else {
-				continue;
 			}
 		}
 
