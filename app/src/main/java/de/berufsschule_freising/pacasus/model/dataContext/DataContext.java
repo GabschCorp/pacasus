@@ -21,9 +21,9 @@ import de.berufsschule_freising.pacasus.model.entity.User;
  */
 public class DataContext extends SQLiteOpenHelper implements AutoCloseable {
 
-	protected static final String DATABASE_NAME = "pacasus";
-	protected static final String TABLE_USER = "user";
-	protected static final String[] TABLE_USER_COLUMNS = {"ID", "login", "password"};
+	private static final String DATABASE_NAME = "pacasus";
+	private static final String TABLE_USER = "user";
+	private static final String[] TABLE_USER_COLUMNS = {"ID", "login", "password"};
 
 	public DataContext(Context context){
 		super(context, DataContext.DATABASE_NAME, null, 1);
@@ -59,6 +59,23 @@ public class DataContext extends SQLiteOpenHelper implements AutoCloseable {
 		catch(Exception ex) {
 			throw ex;
 		}
+	}
+
+	public User fetchUserByID(Integer id){
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String selectQuery = "Select * from " + DataContext.TABLE_USER + " WHERE ID = " + id;
+		Cursor cursor = db.rawQuery(selectQuery, null);
+
+		User user = null;
+		if (cursor.moveToFirst()){
+			user = new User();
+			user.setID(Integer.parseInt(cursor.getString(0)));
+			user.setName(cursor.getString(1));
+			user.setPassword(cursor.getString(2));
+		}
+
+		return user;
 	}
 
 	public ArrayList<User> fetchUser(){

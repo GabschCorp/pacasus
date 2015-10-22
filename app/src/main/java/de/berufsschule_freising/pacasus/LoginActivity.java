@@ -36,12 +36,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 		this.btnLogin.setOnClickListener(this);
 
 		// Fill Database with Inital User
-		User user = new User();
-		user.setID(1);
-		user.setName("admin");
-		user.setPassword("123");
 		try(DataContext db = new DataContext(this)) {
-			db.addUser(user);
+			if (db.fetchUserByID(1) == null) {
+				User user = new User();
+				user.setID(1);
+				user.setName("admin");
+				user.setPassword("123");
+				db.addUser(user);
+			}
 		}
 		catch (Exception ex) {
 			//TODO: Exception handling
