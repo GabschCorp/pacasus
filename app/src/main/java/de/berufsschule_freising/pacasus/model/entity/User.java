@@ -5,9 +5,9 @@ package de.berufsschule_freising.pacasus.model.entity;
  */
 public class User {
 
-	protected Integer id;
-	protected String name;
-	protected String password;
+	private Integer id;
+	private String name;
+	private String password;
 
 	public void setID(Integer id){
 		this.id = id;
