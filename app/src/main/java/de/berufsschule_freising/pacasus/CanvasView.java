@@ -29,6 +29,5 @@ public class CanvasView extends View{
 		canvas.drawPaint(paint);
 		paint.setColor(Color.BLUE);
 		canvas.drawCircle(height / 2, width / 2, radius, paint);
-
 	}
 }
