@@ -6,28 +6,37 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
+import de.berufsschule_freising.pacasus.model.game.Pacman;
+
 /**
  * Created by Gabriel on 22.10.2015.
  */
 public class CanvasView extends View{
 
+	private Pacman pac;
+
 	public CanvasView(Context context)
 	{
 		super(context);
 		//TODO constructor
+
+
+		pac = new Pacman();
 	}
 
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		int height = getHeight();
-		int width = getWidth();
-		int radius = 100;
-		Paint paint = new Paint();
-		paint.setStyle(Paint.Style.FILL);
-		paint.setColor(Color.BLACK);
-		canvas.drawPaint(paint);
-		paint.setColor(Color.BLUE);
-		canvas.drawCircle(height / 2, width / 2, radius, paint);
+
+		// TODO: Bessere Lösung für Gameloop finden
+		pac.setCanvas(canvas);
+		pac.render();
+
+		try {
+			Thread.sleep(100);
+			this.invalidate();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }
