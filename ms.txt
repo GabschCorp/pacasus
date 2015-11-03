@@ -1,38 +1,24 @@
-1: Login mit DB-Anbindung
+1: Login mit DB-Anbindung [X]
 2: GameActivity
 2: Pacman mit Animation bewegen, ohne Karte
 2: Bauen einer "einzeiligen" Karte
-        Bewegen auf dieser Karte (
+        Bewegen auf dieser Karte
 4: komplette Karte
         + Map definieren
-        + Laufen auf dieser Karte (
+        + Laufen auf dieser Karte
         + mit Geister (Zufallsbasiert)
-        + Punkte
+             * Farbänderung bei Pillen
+             * Fressen und zurücklaufen in Käfig
+        + Punkte (Objekte)
+        + Punkte (Score)
         + Pillen
-        + Früchte
+        [+ Früchte]
 [5: Anständige Grafiken]
-6: KI - Für Geister
-7: Steuerung mit Wischen
+[6: KI - Für Geister]
+[7: Steuerung mit Wischen]
 
 
 
 [Open End]
 * Route-Stack (Speicherung mehrerer Richtungen, welche nacheinander abgearbeitet werden)
-* Geister-logik
-               * Inky
-               * Blinky
-               * Clyde
-               * Pinky
-
-
-====
----+
-===|
-
-
-
-Struktur
-app
- - *Activity
- -
-
+* Geister-logik (Inky, Blinky, Clyde, Pinky)
