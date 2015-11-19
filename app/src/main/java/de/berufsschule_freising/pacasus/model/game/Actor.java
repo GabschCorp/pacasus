@@ -7,7 +7,7 @@ import java.sql.Date;
 /**
  * Created by Julian on 21.10.2015.
  */
-public class Actor {
+public abstract class Actor implements IDrawable{
 	private int id;
 	private String name;
 	private Canvas canvas;
@@ -29,4 +29,20 @@ public class Actor {
 		this(name, canvas);
 		this.id = id;
 	}
+
+	@Override
+	public void setCanvas(Canvas canvas) {
+		this.canvas = canvas;
+	}
+
+	@Override
+	public Canvas getCanvas() {
+		return this.canvas;
+	}
+
+	@Override
+	public abstract void render();
+
+	@Override
+	public abstract void clear();
 }

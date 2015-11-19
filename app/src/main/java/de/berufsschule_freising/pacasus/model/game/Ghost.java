@@ -11,7 +11,17 @@ public class Ghost extends Actor implements IMoveable{
 	}
 
 	@Override
-	public void Move() {
+	public void render() {
+
+	}
+
+	@Override
+	public void clear() {
+
+	}
+
+	@Override
+	public void move() {
 
 	}
 }
