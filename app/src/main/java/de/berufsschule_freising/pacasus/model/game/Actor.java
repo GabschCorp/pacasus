@@ -1,21 +1,26 @@
 package de.berufsschule_freising.pacasus.model.game;
 
 import android.graphics.Canvas;
+import android.graphics.PointF;
 
 import java.sql.Date;
 
 /**
  * Created by Julian on 21.10.2015.
  */
-public abstract class Actor implements IDrawable{
+public abstract class Actor implements IActor {
 	private int id;
 	private String name;
 	private Canvas canvas;
+
+	private PointF position;
 
 	public Actor()
 	{
 		this.id = 0;
 		this.name = "";
+
+		this.position = new PointF(0, 0);
 	}
 
 	public Actor(String name, Canvas canvas)
@@ -30,19 +35,22 @@ public abstract class Actor implements IDrawable{
 		this.id = id;
 	}
 
-	@Override
-	public void setCanvas(Canvas canvas) {
-		this.canvas = canvas;
-	}
-
-	@Override
-	public Canvas getCanvas() {
+	public Canvas getCanvas(){
 		return this.canvas;
 	}
 
-	@Override
-	public abstract void render();
+	public void setCanvas(Canvas canvas){
+		this.canvas = canvas;
+	}
 
+	public PointF getPosition(){
+		return this.position;
+	}
+	
 	@Override
 	public abstract void clear();
+
+	public abstract void move();
+
+	public abstract void render();
 }
