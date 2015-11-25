@@ -3,13 +3,26 @@ package de.berufsschule_freising.pacasus.model.game;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 
 /**
  * Created by Julian on 21.10.2015.
  */
-public class Pacman extends Actor implements IMoveable{
+
+// TODO:
+public class Pacman extends Actor {
 
 	private Paint paint;
+
+	private int direction;
+	private float speed = 5;
+
+	public static final int DIRECTION_NONE = 0;
+	public static final int DIRECTION_UP = 1;
+	public static final int DIRECTION_RIGHT = 2;
+	public static final int DIRECTION_DOWN = 3;
+	public static final int DIRECTION_LEFT = 4;
+
 
 	public Pacman(){
 		super();
@@ -19,10 +32,35 @@ public class Pacman extends Actor implements IMoveable{
 		this.paint.setColor(Color.YELLOW);
 	}
 
+	public Pacman(PointF initialPosition){
+		this();
+
+		this.position = initialPosition;
+	}
+
+	public void setDirection(int dir){
+		this.direction = dir;
+	}
+
 	@Override
 	public void move() {
-		this.getPosition().x += 3;
-		this.getPosition().y += 3;
+		switch (this.direction) {
+			case DIRECTION_DOWN :
+				this.getPosition().y += this.speed;
+				break;
+			case DIRECTION_UP :
+				this.getPosition().y -= this.speed;
+				break;
+			case DIRECTION_RIGHT :
+				this.getPosition().x += this.speed;
+				break;
+			case DIRECTION_LEFT :
+				this.getPosition().x -= this.speed;
+				break;
+			case DIRECTION_NONE :
+				break;
+
+		}
 	}
 
 	@Override

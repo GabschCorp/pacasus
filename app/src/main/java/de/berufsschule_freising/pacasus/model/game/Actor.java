@@ -13,7 +13,7 @@ public abstract class Actor implements IActor {
 	private String name;
 	private Canvas canvas;
 
-	private PointF position;
+	protected PointF position;
 
 	public Actor()
 	{
