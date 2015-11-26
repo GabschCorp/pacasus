@@ -62,14 +62,19 @@ public class Pacman extends Actor {
 		}
 	}
 
+	@Override
+	public void clear() {
+
+	}
+	
+	@Override
 	public void render(){
 		float length = Map.getGridUnitLength();
 		Canvas c = this.getCanvas();
 
 		// draw
 		c.drawCircle(this.getPosition().x, this.getPosition().y, length, this.paint);
-
-		//
+			
 		this.move();
 	}
 }

@@ -7,8 +7,9 @@ import android.graphics.Canvas;
  */
 public interface IDrawable {
 
-    public void setCanvas(Canvas canvas);
-    public Canvas getCanvas();
+    void setCanvas(Canvas canvas);
+    Canvas getCanvas();
 
-    public void render();
+    void render();
+    void clear();
 }

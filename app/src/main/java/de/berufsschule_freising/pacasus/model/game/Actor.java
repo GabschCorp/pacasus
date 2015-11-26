@@ -1,7 +1,6 @@
 package de.berufsschule_freising.pacasus.model.game;
 
 import android.graphics.Canvas;
-import android.graphics.Point;
 import android.graphics.PointF;
 
 import java.sql.Date;
@@ -10,7 +9,6 @@ import java.sql.Date;
  * Created by Julian on 21.10.2015.
  */
 public abstract class Actor implements IActor {
-
 	private int id;
 	private String name;
 	private Canvas canvas;
@@ -48,7 +46,9 @@ public abstract class Actor implements IActor {
 	public PointF getPosition(){
 		return this.position;
 	}
-
+	
+	@Override
+	public abstract void clear();
 
 	public abstract void move();
 

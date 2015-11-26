@@ -2,12 +2,9 @@ package de.berufsschule_freising.pacasus;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PointF;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import de.berufsschule_freising.pacasus.model.game.Pacman;
 

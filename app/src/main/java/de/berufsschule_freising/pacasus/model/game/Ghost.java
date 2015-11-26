@@ -10,11 +10,18 @@ public class Ghost extends Actor {
 
 	}
 
-	public void move(){
+	@Override
+	public void render() {
 
 	}
 
-	public void render(){
+	@Override
+	public void clear() {
+
+	}
+
+	@Override
+	public void move() {
 
 	}
 }
