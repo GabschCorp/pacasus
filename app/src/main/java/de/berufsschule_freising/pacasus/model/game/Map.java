@@ -3,6 +3,7 @@ package de.berufsschule_freising.pacasus.model.game;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import com.larvalabs.svgandroid.SVGParser;
 
 /**
  * Created by Julian on 21.10.2015.
@@ -57,6 +58,11 @@ public class Map implements IDrawable {
         if (this.getFilePath() == null){
             // TODO: throw Exception
         }
+    }
+
+    @Override
+    public void clear() {
+
     }
 
     public static float getGridUnitLength(){
