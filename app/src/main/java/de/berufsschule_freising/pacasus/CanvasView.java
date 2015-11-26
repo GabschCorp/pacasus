@@ -2,6 +2,7 @@ package de.berufsschule_freising.pacasus;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.PointF;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -68,15 +69,15 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 		if (Math.abs(distanceX) > Math.abs(distanceY)){
 			if (distanceX < 0){
-				this.pac.setDirection(DirectionType.right);
+				this.pac.setDirection(DirectionType.Right);
 			} else {
-				this.pac.setDirection(DirectionType.left);
+				this.pac.setDirection(DirectionType.Left);
 			}
 		} else {
 			if (distanceY < 0){
-				this.pac.setDirection(DirectionType.down);
+				this.pac.setDirection(DirectionType.Down);
 			} else {
-				this.pac.setDirection(DirectionType.up);
+				this.pac.setDirection(DirectionType.Up);
 			}
 		}
 

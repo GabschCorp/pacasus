@@ -48,19 +48,19 @@ public class Pacman extends Actor {
 	@Override
 	public void move() {
 		switch (this.direction) {
-			case down :
+			case Down :
 				this.getPosition().y += this.speed;
 				break;
-			case up:
+			case Up:
 				this.getPosition().y -= this.speed;
 				break;
-			case right :
+			case Right :
 				this.getPosition().x += this.speed;
 				break;
-			case left :
+			case Left :
 				this.getPosition().x -= this.speed;
 				break;
-			case none :
+			case None :
 				break;
 		}
 	}
