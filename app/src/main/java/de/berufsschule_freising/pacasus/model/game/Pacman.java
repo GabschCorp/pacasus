@@ -28,6 +28,8 @@ public class Pacman extends Actor {
 	public Pacman(){
 		super();
 
+		this.direction = DirectionType.none;
+
 		this.paint = new Paint();
 		this.paint.setStyle(Paint.Style.FILL);
 		this.paint.setColor(Color.YELLOW);
