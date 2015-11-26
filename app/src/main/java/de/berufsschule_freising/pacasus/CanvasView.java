@@ -6,6 +6,7 @@ import android.graphics.PointF;
 import android.view.MotionEvent;
 import android.view.View;
 
+import de.berufsschule_freising.pacasus.model.game.DirectionType;
 import de.berufsschule_freising.pacasus.model.game.Pacman;
 
 /**
@@ -39,16 +40,16 @@ public class CanvasView extends View{
 				if (Math.abs(x - this.startTouchPoint.x) > Math.abs(y - this.startTouchPoint.y)){
 					// Right
 					if (x > this.startTouchPoint.x){
-						this.pac.setDirection(Pacman.DIRECTION_RIGHT);
+						this.pac.setDirection(DirectionType.right);
 					} else { // Left
-						this.pac.setDirection(Pacman.DIRECTION_LEFT);
+						this.pac.setDirection(DirectionType.left);
 					}
 				} else { // Up/Down
 					// Up
 					if (y < this.startTouchPoint.y){
-						this.pac.setDirection(Pacman.DIRECTION_UP);
+						this.pac.setDirection(DirectionType.up);
 					} else { // Down
-						this.pac.setDirection(Pacman.DIRECTION_DOWN);
+						this.pac.setDirection(DirectionType.down);
 					}
 				}
 				break;
@@ -63,6 +64,7 @@ public class CanvasView extends View{
 		// TODO: Bessere Lösung für Gameloop finden
 		pac.setCanvas(canvas);
 		pac.render();
+
 
 		try {
 			Thread.sleep(100);
