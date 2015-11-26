@@ -28,7 +28,7 @@ public class Pacman extends Actor {
 	public Pacman(){
 		super();
 
-		this.direction = DirectionType.none;
+		this.direction = DirectionType.None;
 
 		this.paint = new Paint();
 		this.paint.setStyle(Paint.Style.FILL);
