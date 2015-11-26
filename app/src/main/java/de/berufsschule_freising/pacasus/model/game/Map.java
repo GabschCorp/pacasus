@@ -59,6 +59,11 @@ public class Map implements IDrawable {
         }
     }
 
+    @Override
+    public void clear() {
+
+    }
+
     public static float getGridUnitLength(){
         return Map.GRID_UNIT_LENGTH;
     }
