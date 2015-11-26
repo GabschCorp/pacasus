@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.PorterDuff;
 
 /**
  * Created by Julian on 21.10.2015.
@@ -14,7 +15,7 @@ public class Pacman extends Actor {
 
 	private Paint paint;
 
-	private int direction;
+	private DirectionType direction;
 	private float speed = 5;
 
 	public static final int DIRECTION_NONE = 0;
@@ -38,33 +39,33 @@ public class Pacman extends Actor {
 		this.position = initialPosition;
 	}
 
-	public void setDirection(int dir){
+	public void setDirection(DirectionType dir){
 		this.direction = dir;
 	}
 
 	@Override
 	public void move() {
 		switch (this.direction) {
-			case DIRECTION_DOWN :
+			case down :
 				this.getPosition().y += this.speed;
 				break;
-			case DIRECTION_UP :
+			case up:
 				this.getPosition().y -= this.speed;
 				break;
-			case DIRECTION_RIGHT :
+			case right :
 				this.getPosition().x += this.speed;
 				break;
-			case DIRECTION_LEFT :
+			case left :
 				this.getPosition().x -= this.speed;
 				break;
-			case DIRECTION_NONE :
+			case none :
 				break;
 		}
 	}
 
 	@Override
 	public void clear() {
-
+		getCanvas().drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 	}
 	
 	@Override
