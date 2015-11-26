@@ -59,7 +59,6 @@ public class Pacman extends Actor {
 				break;
 			case DIRECTION_NONE :
 				break;
-
 		}
 	}
 

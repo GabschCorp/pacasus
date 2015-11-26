@@ -64,11 +64,12 @@ public class CanvasView extends View{
 		super.onDraw(canvas);
 
 		// TODO: Bessere Lösung für Gameloop finden
+		// Evtl mit GameTime
 		pac.setCanvas(canvas);
 		pac.render();
 
 		try {
-			Thread.sleep(100);
+			Thread.sleep(20);
 			this.invalidate();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
