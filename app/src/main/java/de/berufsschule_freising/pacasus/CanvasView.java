@@ -24,7 +24,7 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 		gestureDetector = new GestureDetector(context, this);
 		//TODO constructor
 
-		pac = new Pacman(new PointF(this.getWidth() / 2, this.getHeight() / 2));
+		pac = new Pacman(new PointF(this.getWidth(), this.getHeight()), context.getResources());
 	}
 
 	public boolean onTouchEvent(MotionEvent ev){
@@ -43,7 +43,7 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 		pac.render();
 
 		try {
-			Thread.sleep(20);
+			Thread.sleep(70);
 			this.invalidate();
 		} catch (InterruptedException e) {
 			e.printStackTrace();

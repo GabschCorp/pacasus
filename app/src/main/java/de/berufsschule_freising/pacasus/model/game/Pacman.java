@@ -1,10 +1,15 @@
 package de.berufsschule_freising.pacasus.model.game;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
+
+import de.berufsschule_freising.pacasus.R;
 
 /**
  * Created by Julian on 21.10.2015.
@@ -16,14 +21,11 @@ public class Pacman extends Actor {
 	private Paint paint;
 
 	private DirectionType direction;
-	private float speed = 5;
+	private float speed = 50;
 
-	public static final int DIRECTION_NONE = 0;
-	public static final int DIRECTION_UP = 1;
-	public static final int DIRECTION_RIGHT = 2;
-	public static final int DIRECTION_DOWN = 3;
-	public static final int DIRECTION_LEFT = 4;
+	private Resources resources;
 
+	private Animation runAnimation;
 
 	public Pacman(){
 		super();
@@ -35,9 +37,16 @@ public class Pacman extends Actor {
 		this.paint.setColor(Color.YELLOW);
 	}
 
-	public Pacman(PointF initialPosition){
+	public Pacman(PointF initialPosition, Resources resources){
 		this();
 
+		this.runAnimation = new Animation(resources, R.drawable.pacman_characters);
+		this.runAnimation.setColumns(8);
+		this.runAnimation.setRows(8);
+		this.runAnimation.setEndFrame(4);
+			this.runAnimation.setStartFrame(0);
+
+		this.resources = resources;
 		this.position = initialPosition;
 	}
 
@@ -48,7 +57,7 @@ public class Pacman extends Actor {
 	@Override
 	public void move() {
 		switch (this.direction) {
-			case Down :
+			case Down:
 				this.getPosition().y += this.speed;
 				break;
 			case Up:
@@ -69,15 +78,23 @@ public class Pacman extends Actor {
 	public void clear() {
 		getCanvas().drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 	}
-	
+
 	@Override
 	public void render(){
+
 		float length = Map.getGridUnitLength();
 		Canvas c = this.getCanvas();
 
-		// draw
-		c.drawCircle(this.getPosition().x, this.getPosition().y, length, this.paint);
-			
+		// Get Animationframe
+		Bitmap frame = this.runAnimation.createBitmapFrame();
+
+		// Set World Matrix
+		c.scale(0.2f, 0.2f);
+		c.translate(this.getPosition().x, this.getPosition().y);
+		c.rotate((this.direction.ordinal() - 1) * 90, frame.getWidth() / 2, frame.getHeight() /2);
+
+		c.drawBitmap(frame, 0,0, null);
+
 		this.move();
 	}
 }
