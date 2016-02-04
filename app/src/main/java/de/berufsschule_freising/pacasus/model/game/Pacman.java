@@ -30,7 +30,7 @@ public class Pacman extends Actor {
 	public Pacman(){
 		super();
 
-		this.direction = DirectionType.None;
+		this.setDirection(DirectionType.None);
 
 		this.paint = new Paint();
 		this.paint.setStyle(Paint.Style.FILL);
@@ -50,13 +50,10 @@ public class Pacman extends Actor {
 		this.position = initialPosition;
 	}
 
-	public void setDirection(DirectionType dir){
-		this.direction = dir;
-	}
 
 	@Override
 	public void move() {
-		switch (this.direction) {
+		switch (this.getDirection()) {
 			case Down:
 				this.getPosition().y += this.speed;
 				break;
@@ -91,7 +88,7 @@ public class Pacman extends Actor {
 		// Set World Matrix
 		c.scale(0.2f, 0.2f);
 		c.translate(this.getPosition().x, this.getPosition().y);
-		c.rotate((this.direction.ordinal() - 1) * 90, frame.getWidth() / 2, frame.getHeight() /2);
+		c.rotate((this.getDirection().ordinal() - 1) * 90, frame.getWidth() / 2, frame.getHeight() /2);
 
 		c.drawBitmap(frame, 0,0, null);
 

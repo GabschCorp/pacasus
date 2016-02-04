@@ -14,6 +14,7 @@ public abstract class Actor implements IActor {
 	private Canvas canvas;
 
 	protected PointF position;
+	private DirectionType direction;
 
 	public Actor()
 	{
@@ -45,6 +46,14 @@ public abstract class Actor implements IActor {
 
 	public PointF getPosition(){
 		return this.position;
+	}
+
+	public void setDirection(DirectionType dir){
+		this.direction = dir;
+	}
+
+	public DirectionType getDirection(){
+		return this.direction;
 	}
 	
 	@Override
