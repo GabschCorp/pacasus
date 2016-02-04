@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import de.berufsschule_freising.pacasus.model.game.DirectionType;
+import de.berufsschule_freising.pacasus.model.game.Ghost;
 import de.berufsschule_freising.pacasus.model.game.Pacman;
 
 /**
@@ -17,6 +18,7 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 
 	private GestureDetector gestureDetector;
 	private Pacman pac;
+	private Ghost blinky;
 
 	public CanvasView(Context context)
 	{
@@ -24,7 +26,10 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 		gestureDetector = new GestureDetector(context, this);
 		//TODO constructor
 
-		pac = new Pacman(new PointF(this.getWidth(), this.getHeight()), context.getResources());
+		pac = new Pacman(new PointF(this.getWidth()
+				, this.getHeight()), context.getResources());
+
+//		this.blinky = new Ghost("Blinky", new PointF(50, 50), context.getResources());
 	}
 
 	public boolean onTouchEvent(MotionEvent ev){
@@ -39,11 +44,14 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 
 		// TODO: Bessere Lösung für Gameloop finden
 		// Evtl mit GameTime
-		pac.setCanvas(canvas);
-		pac.render();
+		this.pac.setCanvas(canvas);
+		this.pac.render();
+
+//		this.blinky.setCanvas(canvas);
+//		this.blinky.render();
 
 		try {
-			Thread.sleep(70);
+			Thread.sleep(30);
 			this.invalidate();
 		} catch (InterruptedException e) {
 			e.printStackTrace();

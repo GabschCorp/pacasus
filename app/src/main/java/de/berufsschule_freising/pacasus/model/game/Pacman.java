@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
@@ -21,7 +22,7 @@ public class Pacman extends Actor {
 	private Paint paint;
 
 	private DirectionType direction;
-	private float speed = 50;
+	private float speed = 10;
 
 	private Resources resources;
 
@@ -73,24 +74,25 @@ public class Pacman extends Actor {
 
 	@Override
 	public void clear() {
-		getCanvas().drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+		this.getCanvas().drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
 	}
 
 	@Override
 	public void render(){
 
 		float length = Map.getGridUnitLength();
-		Canvas c = this.getCanvas();
+		Canvas canvas = this.getCanvas();
+		canvas.setMatrix(new Matrix());
 
 		// Get Animationframe
 		Bitmap frame = this.runAnimation.createBitmapFrame();
 
 		// Set World Matrix
-		c.scale(0.2f, 0.2f);
-		c.translate(this.getPosition().x, this.getPosition().y);
-		c.rotate((this.getDirection().ordinal() - 1) * 90, frame.getWidth() / 2, frame.getHeight() /2);
+		canvas.scale(0.2f, 0.2f);
+		canvas.translate(this.getPosition().x, this.getPosition().y);
+		canvas.rotate((this.getDirection().ordinal() - 1) * 90, frame.getWidth() / 2, frame.getHeight() /2);
 
-		c.drawBitmap(frame, 0,0, null);
+		canvas.drawBitmap(frame, 0,0, null);
 
 		this.move();
 	}
