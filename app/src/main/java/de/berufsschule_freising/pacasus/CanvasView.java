@@ -2,13 +2,17 @@ package de.berufsschule_freising.pacasus;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.io.IOException;
+
 import de.berufsschule_freising.pacasus.model.game.DirectionType;
 import de.berufsschule_freising.pacasus.model.game.Ghost;
+import de.berufsschule_freising.pacasus.model.game.Map;
 import de.berufsschule_freising.pacasus.model.game.Pacman;
 
 /**
@@ -20,14 +24,21 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 	private Pacman pac;
 	private Ghost blinky;
 
+	private Map map;
+
 	public CanvasView(Context context)
 	{
 		super(context);
 		gestureDetector = new GestureDetector(context, this);
 		//TODO constructor
 
-		pac = new Pacman(new PointF(this.getWidth()
-				, this.getHeight()), context.getResources());
+		try {
+			this.map = new Map(context.getAssets(), 500, 500);
+		} catch (IOException ex){
+
+		}
+
+		pac = new Pacman(new Point(2,2), context.getResources(), this.map);
 
 //		this.blinky = new Ghost("Blinky", new PointF(50, 50), context.getResources());
 	}
@@ -46,6 +57,9 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 		// Evtl mit GameTime
 		this.pac.setCanvas(canvas);
 		this.pac.render();
+
+		this.map.setCanvas(canvas);
+		this.map.render();
 
 //		this.blinky.setCanvas(canvas);
 //		this.blinky.render();

@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 
@@ -21,12 +22,17 @@ public class Pacman extends Actor {
 
 	private Paint paint;
 
+	//private PointF mapPosition; // Position in GridUnitLenghts innerhalb der Map; bin ich berechenbar??
+
 	private DirectionType direction;
 	private float speed = 10;
 
 	private Resources resources;
 
 	private Animation runAnimation;
+
+	private Map map;
+	private float scaleFactor;
 
 	public Pacman(){
 		super();
@@ -38,38 +44,83 @@ public class Pacman extends Actor {
 		this.paint.setColor(Color.YELLOW);
 	}
 
-	public Pacman(PointF initialPosition, Resources resources){
+
+
+	public Pacman(Point initialPosition, Resources resources, Map map){
 		this();
+
+		this.map = map;
 
 		this.runAnimation = new Animation(resources, R.drawable.pacman_characters);
 		this.runAnimation.setColumns(8);
 		this.runAnimation.setRows(8);
 		this.runAnimation.setEndFrame(4);
-			this.runAnimation.setStartFrame(0);
+		this.runAnimation.setStartFrame(0);
+
+		int frameWidth = this.runAnimation.getFrameWidth();
+		this.scaleFactor = Map.getGridUnitLength() / frameWidth;
+				// 100 (pacframe ) = 302px
+				// x 			 = gridunitlegnt
 
 		this.resources = resources;
-		this.position = initialPosition;
+		this.setMapPosition(initialPosition.x, initialPosition.y); // TsDO: prüfen
 	}
 
 
 	@Override
 	public void move() {
-		switch (this.getDirection()) {
-			case Down:
-				this.getPosition().y += this.speed;
-				break;
-			case Up:
-				this.getPosition().y -= this.speed;
-				break;
-			case Right :
-				this.getPosition().x += this.speed;
-				break;
-			case Left :
-				this.getPosition().x -= this.speed;
-				break;
-			case None :
-				break;
+		// TODO:
+		if (this.canWalk(this.direction)) {
+
+			switch (this.getDirection()) {
+				case Down:
+					this.getPosition().y += this.speed;
+					break;
+				case Up:
+					this.getPosition().y -= this.speed;
+					break;
+				case Right:
+					this.getPosition().x += this.speed;
+					break;
+				case Left:
+					this.getPosition().x -= this.speed;
+					break;
+				case None:
+					break;
+			}
 		}
+	}
+
+	public boolean canWalk(DirectionType dir){
+		Point mapPos = this.computeMapPosition();
+
+		if (DirectionType.Up == dir){
+			mapPos.y--;
+		}
+
+		if (DirectionType.Down == dir){
+			mapPos.y++;
+		}
+		if (DirectionType.Right == dir){
+			mapPos.x++;
+		}
+		if (DirectionType.Left == dir){
+			mapPos.y--;
+		}
+
+		// TODO: Richtung plus/minus 1
+		if (Character.isWhitespace(this.map.getCharAtPoint(mapPos))){
+			 return false;
+		}
+
+		return true;
+	}
+
+	private Point computeMapPosition(){
+		float x = this.getPosition().x / this.map.getGridUnitLength();
+		float y = this.getPosition().y / this.map.getGridUnitLength();
+
+		return new Point((int) x, (int) y);
 	}
 
 	@Override
@@ -82,18 +133,29 @@ public class Pacman extends Actor {
 
 		float length = Map.getGridUnitLength();
 		Canvas canvas = this.getCanvas();
-		canvas.setMatrix(new Matrix());
+		Matrix oMat = new Matrix();
+		oMat.setTranslate(0, 200);
+		canvas.setMatrix(oMat);
 
 		// Get Animationframe
 		Bitmap frame = this.runAnimation.createBitmapFrame();
 
 		// Set World Matrix
-		canvas.scale(0.2f, 0.2f);
+		canvas.scale(this.scaleFactor, this.scaleFactor);
+		//canvas.translate(0, 200); // TODO:
 		canvas.translate(this.getPosition().x, this.getPosition().y);
 		canvas.rotate((this.getDirection().ordinal() - 1) * 90, frame.getWidth() / 2, frame.getHeight() /2);
 
 		canvas.drawBitmap(frame, 0,0, null);
 
 		this.move();
+	}
+
+	public void setMapPosition(int x, int y){
+		this.setPosition(new PointF(x * this.map.getGridUnitLength(), y * this.map.getGridUnitLength()));
+	}
+
+	private void setPosition(PointF pos){
+		this.position = pos;
 	}
 }
