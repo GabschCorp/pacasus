@@ -3,8 +3,6 @@ package de.berufsschule_freising.pacasus.model.game;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 
-import java.sql.Date;
-
 /**
  * Created by Julian on 21.10.2015.
  */
@@ -35,6 +33,8 @@ public abstract class Actor implements IActor {
 		this(name, canvas);
 		this.id = id;
 	}
+
+	// public abstract boolean intersects(Actor actor);
 
 	public Canvas getCanvas(){
 		return this.canvas;

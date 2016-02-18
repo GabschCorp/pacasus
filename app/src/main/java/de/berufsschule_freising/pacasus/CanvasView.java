@@ -1,5 +1,6 @@
 package de.berufsschule_freising.pacasus;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
@@ -26,16 +27,20 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 
 	private Map map;
 
-	public CanvasView(Context context)
+	public CanvasView(Activity context)
 	{
 		super(context);
 		gestureDetector = new GestureDetector(context, this);
 		//TODO constructor
 
+
 		try {
-			this.map = new Map(context.getAssets(), 500, 500);
+			this.map = new Map(context.getAssets());
+			this.map.parse();
 		} catch (IOException ex){
 
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		pac = new Pacman(new Point(2,2), context.getResources(), this.map);
@@ -55,22 +60,19 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 
 		// TODO: Bessere Lösung für Gameloop finden
 		// Evtl mit GameTime
-		this.pac.setCanvas(canvas);
-		this.pac.render();
-
 		this.map.setCanvas(canvas);
-		this.map.render();
+		this.pac.setCanvas(canvas);
 
-//		this.blinky.setCanvas(canvas);
-//		this.blinky.render();
+		this.map.render();
+		this.pac.render();
 
 		try {
 			Thread.sleep(30);
-			this.invalidate();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
+		this.invalidate();
+}
 
 	@Override
 	public boolean onDown(MotionEvent e) {

@@ -7,25 +7,22 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.RectF;
-import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.ArcShape;
-import android.graphics.drawable.shapes.Shape;
+import android.graphics.PorterDuff;
 import android.util.Log;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.security.auth.callback.CallbackHandler;
 
 /**
  * Created by Julian on 21.10.2015.
  */
 public class Map implements IDrawable {
 
-    private Canvas canvas;
+    private Canvas canvas = null;
     private String filePath;
     private AssetManager assetManager;
 
@@ -40,84 +37,85 @@ public class Map implements IDrawable {
     private int width;
     private int height;
 
-	private char[][] charMap = new char[999][999];
+    private InputStream io;
+
+    /** Aufbau wie Matrix => char[row][column] */
+//	private char[][] charMap;
+
+    private List<List<Character>> charMap = new ArrayList<>();
 
     // Wert, welcher angibt, wie lang eine Einheit des Rasters ist.
     // Hoffe, es ist verständlich was ich mein :D
     // TODO: Vllt kann man diesen Wert berechnen, evlt const setzen
-    public static float GRID_UNIT_LENGTH = 10f;
+    public static float GridUnitLength = 0f;
 
-    public Map(AssetManager am, int width, int height) throws IOException {
+    public Map(AssetManager am) throws IOException {
         this.assetManager = am;
-        this.width = width;
-        this.height = height;
 
         this.paint = new Paint();
         this.paint.setStyle(Paint.Style.STROKE);
         this.paint.setColor(Color.BLUE);
-
-        InputStream mapfile = this.assetManager.open("maps/proof");
-        this.bitmapMap = parse(mapfile);
     }
 
-    private Bitmap parse(InputStream io) throws IOException {
-        Bitmap bmp = Bitmap.createBitmap(this.width , this.height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bmp);
+    public void parse() throws Exception {
+//        if (this.width == 0 || this.height == 0){
+//            throw new Exception("Width and Height must be set");
+//        }
+//        if (this.canvas == null){
+//            throw new Exception("Canvas must be set");
+//        }
 
-        byte[] contentBytes = new byte[io.available()];
+        this.io = this.assetManager.open("maps/proof");
+
+        byte[] contentBytes = new byte[this.io.available()];
         io.read(contentBytes);
+
 
         String content = new String(contentBytes);
 
         Log.w("Map", content);
 
-        // Compute Grid Unit Length
-        // CanvasWidth / AnzahlZeichenProZeile
-        int i = 0;
         char[] contentChars = content.toCharArray();
-        while (contentChars[i] != Character.LINE_SEPARATOR){
-            i++;
+
+        // set charmap
+        ArrayList<Character> tmpList = new ArrayList<>();
+        for (char c : contentChars){ // Get Columncount and rowCount
+            Log.w("Map", String.valueOf(c));
+
+            if (c != Character.LINE_SEPARATOR) { // zeilenende
+                tmpList.add(tmpList.size(), c);
+            } else {
+                this.charMap.add(this.charMap.size(), tmpList);
+                tmpList = new ArrayList<>();
+            }
         }
-        this.GRID_UNIT_LENGTH = this.width / i;
+        this.charMap.add(this.charMap.size(), tmpList); // Letzte Zeile hinzufügen
 
-        int row = 0;
-        int column = -1;
-
-        for (char c : content.toCharArray()){
-            column++;
-
-			this.charMap[row][column] = c;
-
-            switch (c) {
-                case '╔' :
-                case '╗' :
-                case '╚' :
-                case '╝' :
-                case '═' :
-                    canvas.drawLine(column * GRID_UNIT_LENGTH + (GRID_UNIT_LENGTH / 2),
-                            row * GRID_UNIT_LENGTH + (GRID_UNIT_LENGTH / 2),
-                            (column + 1) * GRID_UNIT_LENGTH + (GRID_UNIT_LENGTH / 2),
-                            (row) * GRID_UNIT_LENGTH  + (GRID_UNIT_LENGTH / 2), this.paint);
-                    break;
-                case '║' :
-                    canvas.drawLine(column * GRID_UNIT_LENGTH ,
-                            row * GRID_UNIT_LENGTH,
-                            (column) * GRID_UNIT_LENGTH,
-                            (row + 1) * GRID_UNIT_LENGTH, this.paint);
-                    break;
-				case Character.LINE_SEPARATOR :
-					row++;
-					column = -1;
-					break;
+        for (int i = 0; i < this.charMap.size(); i++) { // row
+            for (int j = 0; j < this.charMap.get(i).size(); j++) { // columns
+                Log.w("Map" + i, String.valueOf(this.charMap.get(i).get(j)));
             }
         }
 
-        return bmp;
+        Log.w("Map", "charmap set");
+        Log.w("Map", String.valueOf(this.charMap.size()));
+        Log.w("Map", String.valueOf(this.charMap.get(1).size()));
+
+
+        // Compute Grid Unit Length
+        // CanvasWidth / AnzahlZeichenProZeile
+        //this.GridUnitLength = this.width / this.charMap.size();
+        this.GridUnitLength = 50;
+        Log.w("Map", "GridUnitLenght:" + this.getGridUnitLength());
+
     }
 
-    public Map(AssetManager am, Canvas canvas, int width, int height) throws IOException {
-        this(am, width, height);
-        this.setCanvas(canvas);
+    public void setWidth(int width)  {
+        this.width = width;
+    }
+
+    public void setHeight(int height){
+        this.height = height;
     }
 
     public Canvas getCanvas(){
@@ -126,6 +124,9 @@ public class Map implements IDrawable {
 
     public void setCanvas(Canvas canvas){
         this.canvas = canvas;
+        Log.w("Map:width", String.valueOf(canvas.getWidth()));
+        this.GridUnitLength = this.getCanvas().getWidth() / this.charMap.get(0).size();
+
     }
 
     public String getFilePath(){
@@ -139,27 +140,70 @@ public class Map implements IDrawable {
     @Override
     public void render() {
         if (this.getCanvas() == null){
-            // TODO: throw Exception
-        }
-        if (this.getFilePath() == null){
-            // TODO: throw Exception
+            throw new RuntimeException("Canvas must be set");
         }
 
         this.getCanvas().setMatrix(new Matrix());
         this.getCanvas().translate(0, 200);
-        this.getCanvas().drawBitmap(this.bitmapMap, 0, 0, null);
+        this.renderMap();
+        //
+        //this.canvas.drawBitmap(this.bitmapMap, 0, 0, null);
+    }
+
+    private void renderMap(){
+        canvas = this.getCanvas();
+
+        int row = 0;
+        int column = -1;
+
+        //Bitmap bmp = Bitmap.createBitmap(this.width , this.height, Bitmap.Config.ARGB_8888);
+        //canvas = this.getCanvas();
+
+        for (int i = 0; i < this.charMap.size(); i++) { // row
+            for (int j = 0; j < this.charMap.get(i).size(); j++) { // columns
+                char c = this.charMap.get(i).get(j);
+                switch (c) {
+                    case '╔':
+                    case '╗':
+                    case '╚':
+                    case '╝':
+                    case '═':
+                        canvas.drawLine(j * this.GridUnitLength - (this.GridUnitLength / 2),
+                                i * this.GridUnitLength - (this.GridUnitLength / 2),
+                                (j + 1) * this.GridUnitLength - (this.GridUnitLength / 2),
+                                (i) * this.GridUnitLength - (this.GridUnitLength / 2), this.paint);
+                        break;
+                    case '║':
+                        canvas.drawLine(j * this.GridUnitLength - (this.GridUnitLength / 2),
+                                i * this.GridUnitLength - (this.GridUnitLength / 2),
+                                (j) * this.GridUnitLength - (this.GridUnitLength / 2),
+                                (i + 1) * this.GridUnitLength - (this.GridUnitLength / 2), this.paint);
+                        break;
+                }
+            }
+        }
     }
 
     @Override
     public void clear() {
-
+        this.getCanvas().drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
     }
 
-    public static float getGridUnitLength(){
-        return Map.GRID_UNIT_LENGTH;
+    public float getGridUnitLength(){
+        return this.GridUnitLength;
     }
 
 	public char getCharAtPoint(Point pos){
-		return 'a';
+        Log.w("map-x", String.valueOf(pos.x));
+        Log.w("map-y", String.valueOf(pos.y));
+        //Log.w("map-xl", String.valueOf(this.charMap.size()));
+        //Log.w("map-yl", String.valueOf(this.charMap.get(pos.y).size()));
+
+        if (this.charMap.get(0).size() >= pos.x && pos.x >= 0 &&
+               this.charMap.size() >= pos.y && pos.y >= 0){
+             return this.charMap.get(pos.y).get(pos.x);
+        }
+
+        return '*';
 	}
 }
