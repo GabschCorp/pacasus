@@ -23,9 +23,13 @@ public class Pacman extends Actor {
 
 	private Paint paint;
 
+	// initialMapPosition;
+	private Point initialPosition;
+
 	//private PointF mapPosition; // Position in GridUnitLenghts innerhalb der Map; bin ich berechenbar??
 
-	private DirectionType direction;
+	private DirectionType direction = DirectionType.None;
+	private DirectionType nextDirection = DirectionType.None;
 	private float speed = 10;
 
 	private Resources resources;
@@ -69,44 +73,63 @@ public class Pacman extends Actor {
 		this.runAnimation.setEndFrame(4);
 		this.runAnimation.setStartFrame(0);
 
+		// Scalings for Animation
+		this.stayAnimation.setScaleHeight(this.map.getGridUnitLength());
+		this.stayAnimation.setScaleWidth(this.map.getGridUnitLength());
+		this.runAnimation.setScaleHeight(this.map.getGridUnitLength());
+		this.runAnimation.setScaleWidth(this.map.getGridUnitLength());
+
 		int frameWidth = this.runAnimation.getFrameWidth();
 		this.scaleFactor = this.map.getGridUnitLength() / frameWidth;
 				// 100 (pacframe ) = 302px
 				// x 			 = gridunitlegnt
 
 		this.resources = resources;
-		this.setMapPosition(initialPosition.x, initialPosition.y); // TsDO: prüfen
+
+		this.initialPosition = initialPosition;
 	}
 
 
 	@Override
 	public void move() {
-		// TODO:
-		if (this.canWalk(this.getDirection())) {
-			switch (this.getDirection()) {
-				case Down:
-					this.currentAnimation = this.runAnimation;
-					this.getPosition().y += this.speed;
-					break;
-				case Up:
-					this.currentAnimation = this.runAnimation;
-					this.getPosition().y -= this.speed;
-					break;
-				case Right:
-					this.currentAnimation = this.runAnimation;
-					this.getPosition().x += this.speed;
-					break;
-				case Left:
-					this.currentAnimation = this.runAnimation;
-					this.getPosition().x -= this.speed;
-					break;
-				case None:
-					this.currentAnimation = this.stayAnimation;
-					break;
-			}
-		} else {
+
+		if (this.canWalk(this.getNextDirection()) && this.getNextDirection() != DirectionType.None) {// Kann in die nächste, angegebene Richtung laufen?
+
+			// Richtungen aktualisieren
+			this.direction = this.getNextDirection();
+			this.setDirection(DirectionType.None);
+
+			this.modifyPosition();
+
+		} else if(this.canWalk(this.getDirection())){ // Kann in die aktulle Richtung laufen?
+			this.modifyPosition();
+		} else { // Stop
 			this.direction = DirectionType.None;
 			this.currentAnimation = this.stayAnimation;
+	}
+	}
+
+	private void modifyPosition(){
+		switch (this.getDirection()) {
+			case Down:
+				this.currentAnimation = this.runAnimation;
+				this.getPosition().y += this.speed;
+				break;
+			case Up:
+				this.currentAnimation = this.runAnimation;
+				this.getPosition().y -= this.speed;
+				break;
+			case Right:
+				this.currentAnimation = this.runAnimation;
+				this.getPosition().x += this.speed;
+				break;
+			case Left:
+				this.currentAnimation = this.runAnimation;
+				this.getPosition().x -= this.speed;
+				break;
+			case None:
+				this.currentAnimation = this.stayAnimation;
+				break;
 		}
 	}
 
@@ -144,7 +167,7 @@ public class Pacman extends Actor {
 		float x = this.getPosition().x / (this.map.getGridUnitLength());
 		float y = this.getPosition().y / (this.map.getGridUnitLength());
 
-		return new Point((int)Math.ceil((double) x) -1, (int)Math.ceil((double) y) -1);
+		return new Point((int)Math.ceil((double) x), (int)Math.ceil((double) y));
 	}
 
 	@Override
@@ -157,27 +180,43 @@ public class Pacman extends Actor {
 
 		Canvas canvas = this.getCanvas();
 		Matrix oMat = new Matrix();
-		// oMat.setTranslate(0, 200);
+		canvas.setMatrix(oMat);
 
 		// Get Animationframe
+		this.currentAnimation.setRotation((this.getDirection().ordinal() - 1) * 90);
 		Bitmap frame = this.currentAnimation.createBitmapFrame();
 
-		// Calc World Matrix
-		oMat.setScale(this.scaleFactor, this.scaleFactor);
-		oMat.setRotate((this.getDirection().ordinal() - 1) * 90, frame.getWidth() / 2, frame.getHeight() / 2);
-		oMat.setTranslate(this.getPosition().x, this.getPosition().y);
+		// Erstes zeichnen; Kartenposition setzen
+		if (this.getPosition().x == 0){
+			this.setMapPosition(this.initialPosition);
+		}
 
-		canvas.setMatrix(oMat);
-		canvas.drawBitmap(frame, 0,0, null);
+		canvas.drawBitmap(frame, this.getPosition().x, this.getPosition().y +200, null);
 
 		this.move();
 	}
 
-	public void setMapPosition(int x, int y){
-		this.setPosition(new PointF(x * this.map.getGridUnitLength(), y * this.map.getGridUnitLength()));
+	public void setMapPosition(Point pos){
+		this.setPosition(new PointF(pos.x * this.map.getGridUnitLength(), pos.y * this.map.getGridUnitLength()));
 	}
 
 	private void setPosition(PointF pos){
 		this.position = pos;
+	}
+
+	public void setDirection(DirectionType dir){
+		if (this.direction == DirectionType.None){
+			this.direction = dir;
+		} else {
+			this.nextDirection = dir;
+		}
+	}
+
+	public DirectionType getDirection(){
+		return this.direction;
+	}
+
+	public DirectionType getNextDirection(){
+		return this.nextDirection;
 	}
 }

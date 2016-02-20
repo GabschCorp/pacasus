@@ -11,8 +11,8 @@ public abstract class Actor implements IActor {
 	private String name;
 	private Canvas canvas;
 
-	protected PointF position;
-	private DirectionType direction;
+	protected PointF position = new PointF();
+	private DirectionType direction = DirectionType.None;
 
 	public Actor()
 	{
