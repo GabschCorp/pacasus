@@ -43,7 +43,7 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 			e.printStackTrace();
 		}
 
-		pac = new Pacman(new Point(2,2), context.getResources(), this.map);
+		pac = new Pacman(new Point(1,1), context.getResources(), this.map);
 
 //		this.blinky = new Ghost("Blinky", new PointF(50, 50), context.getResources());
 	}

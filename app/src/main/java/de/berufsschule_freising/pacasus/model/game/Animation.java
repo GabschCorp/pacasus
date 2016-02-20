@@ -3,12 +3,10 @@ package de.berufsschule_freising.pacasus.model.game;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.service.restrictions.RestrictionsReceiver;
-import android.util.Log;
 
-import de.berufsschule_freising.pacasus.R;
 
 /**
  * Created by Julian on 26.11.2015.
@@ -32,6 +30,12 @@ public class Animation {
 
 	private Point currentFrame;
 	private int currentFrameNr = 0;
+
+	// Scales
+	private float scaleWidth = 0;
+	private float scaleHeight = 0;
+
+	private float rotation = 0;
 
 	public Animation(Resources resources, int spritesheetsource) {
 		this.spriteSheet = BitmapFactory.decodeResource(resources, spritesheetsource);
@@ -87,7 +91,18 @@ public class Animation {
 //		if (frame.x > this.getFrameWidth() || frame.y > this.getFrameHeight()){
 //			frame = this.getFrameByNr(this.currentFrameNr = startFrame);
 //		}
-		Bitmap bmp = Bitmap.createBitmap(this.spriteSheet, frame.x, frame.y, this.getFrameWidth(), this.getFrameHeight());
+
+		Matrix matrix = new Matrix();
+		matrix.postRotate(this.getRotation());
+
+		Bitmap bmp = Bitmap.createBitmap(this.spriteSheet, frame.x, frame.y, this.getFrameWidth(), this.getFrameHeight(), matrix, true);
+
+		// Scale Bitmap
+		if (this.getScaleWidth() != 0 && this.getScaleHeight() != 0){
+			bmp = Bitmap.createScaledBitmap(bmp, (int)this.getScaleWidth(), (int)this.getScaleHeight(), false);
+		}
+
+
 
 		this.currentFrameNr++;
 		// TODO: incrementcurrenframenumber();
@@ -138,5 +153,29 @@ public class Animation {
 
 	public float getSpritesheetHeight(){
 		return (float)this.spriteSheet.getHeight();
+	}
+
+	public float getScaleWidth() {
+		return this.scaleWidth;
+	}
+
+	public void setScaleWidth(float scaleWidth) {
+		this.scaleWidth = scaleWidth;
+	}
+
+	public float getScaleHeight() {
+		return this.scaleHeight;
+	}
+
+	public void setScaleHeight(float scaleHeight) {
+		this.scaleHeight = scaleHeight;
+	}
+
+	public float getRotation() {
+		return this.rotation;
+	}
+
+	public void setRotation(float rotation) {
+		this.rotation = rotation;
 	}
 }
