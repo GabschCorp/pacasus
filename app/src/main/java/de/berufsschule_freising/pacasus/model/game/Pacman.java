@@ -1,6 +1,6 @@
 package de.berufsschule_freising.pacasus.model.game;
 
-import android.content.res.Resources;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -8,11 +8,10 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.PointF;
 import android.graphics.PorterDuff;
-import android.util.Log;
 
-import de.berufsschule_freising.pacasus.R;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by Julian on 21.10.2015.
@@ -39,14 +38,24 @@ public class Pacman extends Actor {
 		this.paint.setColor(Color.YELLOW);
 	}
 
-	public Pacman(Point initialPosition, Resources resources, Map map){
+	public Pacman(Point initialPosition, AssetManager am, Map map){
 		this();
 
 		this.setMap(map);
+		this.setAssetManager(am);
 
 		this.setSpeed(map.getGridUnitLength() / 4);
 
-		this.stayAnimation = new Animation(resources, R.drawable.pacman_characters);
+		InputStream spriteSheetInputStream;
+		Bitmap spriteSheet = null;
+		try {
+			spriteSheetInputStream = this.getAssetManager().open("pacman_characters.png");
+			spriteSheet = BitmapFactory.decodeStream(spriteSheetInputStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		this.stayAnimation = new Animation(spriteSheet);
 		this.stayAnimation.setColumns(8);
 		this.stayAnimation.setRows(8);
 		this.stayAnimation.setEndFrame(0);
@@ -54,7 +63,7 @@ public class Pacman extends Actor {
 
 		this.setCurrentAnimation(stayAnimation);
 
-		this.runAnimation = new Animation(resources, R.drawable.pacman_characters);
+		this.runAnimation = new Animation(spriteSheet);
 		this.runAnimation.setColumns(8);
 		this.runAnimation.setRows(8);
 		this.runAnimation.setEndFrame(4);
@@ -65,7 +74,7 @@ public class Pacman extends Actor {
 				// 100 (pacframe ) = 302px
 				// x 			 = gridunitlegnt
 
-		this.setResources(resources);
+		//this.setResources(resources);
 
 		this.setInitialPosition(initialPosition);
 	}
@@ -73,7 +82,6 @@ public class Pacman extends Actor {
 
 	@Override
 	public void move() {
-
 		if (this.canWalk(this.getNextDirection()) && this.getNextDirection() != DirectionType.None) {// Kann in die nächste, angegebene Richtung laufen?
 
 			// Richtungen aktualisieren
@@ -87,7 +95,7 @@ public class Pacman extends Actor {
 		} else { // Stop
 			this.setDirection(DirectionType.None);
 			this.setCurrentAnimation(this.stayAnimation);
-	}
+		}
 	}
 
 	private void modifyPosition(){
@@ -112,46 +120,6 @@ public class Pacman extends Actor {
 				this.setCurrentAnimation(this.stayAnimation);
 				break;
 		}
-	}
-
-	public boolean canWalk(DirectionType dir){
-		Point mapPos = this.getMapPosition();
-
-		if (DirectionType.Up == dir){
-			mapPos.y--;
-		}
-		else if (DirectionType.Down == dir){
-			mapPos.y++;
-		}
-		else if (DirectionType.Right == dir){
-			mapPos.x++;
-		}
-		else if (DirectionType.Left == dir){
-			mapPos.x--;
-		}
-
-		// TODO: Richtung plus/minus 1
-		char tmp;
-		tmp = this.getMap().getCharAtPoint(mapPos);
-		Log.w("Map", String.valueOf(tmp));
-		if (Character.isWhitespace(tmp) ||
-				tmp == '*' ||
-				tmp == 'p'){
-
-
-			return true;
-		}
-		return false;
-	}
-
-	private Point getMapPosition(){
-		Log.w("Pacman", String.valueOf(this.getPosition().x));
-		Log.w("Pacman", String.valueOf(this.getPosition().y));
-
-		float x = this.getPosition().x / (this.getMap().getGridUnitLength());
-		float y = this.getPosition().y / (this.getMap().getGridUnitLength());
-
-		return new Point((int)x, (int)y);
 	}
 
 	@Override

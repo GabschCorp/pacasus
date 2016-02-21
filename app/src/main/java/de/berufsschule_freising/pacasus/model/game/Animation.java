@@ -37,8 +37,9 @@ public class Animation {
 
 	private float rotation = 0;
 
-	public Animation(Resources resources, int spritesheetsource) {
-		this.spriteSheet = BitmapFactory.decodeResource(resources, spritesheetsource);
+	public Animation(Bitmap spritesheet) {
+		this.spriteSheet = spritesheet;
+
 		//this.spriteSheet = Bitmap.createBitmap(bmpFile);
 		currentFrame = new Point();
 	}

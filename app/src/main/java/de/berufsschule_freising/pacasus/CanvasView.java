@@ -1,10 +1,8 @@
 package de.berufsschule_freising.pacasus;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
-import android.graphics.PointF;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +11,7 @@ import java.io.IOException;
 
 import de.berufsschule_freising.pacasus.model.game.DirectionType;
 import de.berufsschule_freising.pacasus.model.game.Ghost;
+import de.berufsschule_freising.pacasus.model.game.GhostFactory;
 import de.berufsschule_freising.pacasus.model.game.Map;
 import de.berufsschule_freising.pacasus.model.game.Pacman;
 
@@ -24,6 +23,9 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 	private GestureDetector gestureDetector;
 	private Pacman pac;
 	private Ghost blinky;
+	private Ghost inky;
+	private Ghost clyde;
+	private Ghost pinky;
 
 	private Map map;
 
@@ -43,9 +45,12 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 			e.printStackTrace();
 		}
 
-		pac = new Pacman(new Point(1,1), context.getResources(), this.map);
+		pac = new Pacman(new Point(1,1), context.getAssets(), this.map);
 
-		this.blinky = new Ghost("Blinky", new Point(16, 12), context.getResources());
+		this.blinky = GhostFactory.createBlinky(this.map, new Point(11, 16),context.getAssets());
+		this.clyde = GhostFactory.createClyde(this.map, new Point(11, 16), context.getAssets());
+		this.inky = GhostFactory.createInky(this.map, new Point(11, 16), context.getAssets());
+		this.pinky = GhostFactory.createPinky(this.map, new Point(11, 16), context.getAssets());
 	}
 
 	public boolean onTouchEvent(MotionEvent ev){
@@ -62,8 +67,16 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 		// Evtl mit GameTime
 		this.map.setCanvas(canvas);
 		this.pac.setCanvas(canvas);
+		this.blinky.setCanvas(canvas);
+		this.clyde.setCanvas(canvas);
+		this.inky.setCanvas(canvas);
+		this.pinky.setCanvas(canvas);
 
 		this.map.render();
+		this.blinky.render();
+		this.clyde.render();
+		this.inky.render();
+		this.pinky.render();
 		this.pac.render();
 
 		try {

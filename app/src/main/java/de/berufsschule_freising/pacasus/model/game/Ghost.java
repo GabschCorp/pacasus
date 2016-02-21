@@ -1,36 +1,31 @@
 package de.berufsschule_freising.pacasus.model.game;
 
-import android.content.res.Resources;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Point;
-import android.graphics.PointF;
 import android.graphics.PorterDuff;
+import android.util.Log;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.HashMap;
 
-import de.berufsschule_freising.pacasus.R;
+import de.berufsschule_freising.pacasus.model.game.*;
 
 /**
  * Created by Julian on 21.10.2015.
  */
 public class Ghost extends Actor {
 
-	private String name;
-
-	private float speed = 10;
-
-	private PointF position;
-
 	private HashMap<DirectionType, Animation> animationMap;
 
-	private Animation currentAnimation;
 	private Animation rightAnimation;
+
 	private Animation topAnimation;
 	private Animation leftAnimation;
 	private Animation downAnimation;
@@ -45,47 +40,18 @@ public class Ghost extends Actor {
 //		Inky blau
 //		Blinky Rot
 //		Pinky Pinky
-	public Ghost(String name, Point initialPosition, Resources resouces) {
+	public Ghost(String name, Point initialPosition, de.berufsschule_freising.pacasus.model.game.Map map, AssetManager am) {
 		this();
 
-		this.name = name;
-		// this.position = initialPosition;
-		this.setDirection(DirectionType.Down);
+		this.setName(name);
+		this.setMap(map);
+		this.setInitialPosition(initialPosition);
+		this.setAssetManager(am);
+
+		this.setDirection(DirectionType.Right);
+		this.setNextDirection(DirectionType.Left);
 
 		this.animationMap = new HashMap<>();
-
-		Animation anim = new Animation(resouces, R.drawable.pacman_characters);
-		anim.setColumns(8);
-		anim.setRows(8);
-		anim.setStartFrame(36);
-		anim.setEndFrame(38);
-
-		this.animationMap.put(DirectionType.Down, anim);
-//
-//		anim = new Animation(resouces, R.drawable.pacman_characters);
-//		anim.setColumns(8);
-//		anim.setRows(8);
-//		anim.setStartFrame(34);
-//		anim.setEndFrame(36);
-//
-//		this.animationMap.put(DirectionType.Right, anim);
-//
-//
-//		anim = new Animation(resouces, R.drawable.pacman_characters);
-//		anim.setColumns(8);
-//		anim.setRows(8);
-//		anim.setStartFrame(32);
-//		anim.setEndFrame(34);
-//
-//		this.animationMap.put(DirectionType.Up, anim);
-//
-//		anim = new Animation(resouces, R.drawable.pacman_characters);
-//		anim.setColumns(8);
-//		anim.setRows(8);
-//		anim.setStartFrame(38);
-//		anim.setEndFrame(40);
-//
-//		this.animationMap.put(DirectionType.Left, anim);
 	}
 
 	@Override
@@ -94,11 +60,17 @@ public class Ghost extends Actor {
 
 		canvas.setMatrix(new Matrix());
 
-		Bitmap frame = this.animationMap.get(this.getDirection()).createBitmapFrame();
-		canvas.scale(0.2f, 0.2f);
-		canvas.translate(this.getPosition().x, this.getPosition().y);
+		this.animationMap.get(this.getDirection()).setScaleHeight(this.getMap().getGridUnitLength());
+		this.animationMap.get(this.getDirection()).setScaleWidth(this.getMap().getGridUnitLength());
 
-		canvas.drawBitmap(frame, 0, 0, null);
+		Bitmap frame = this.animationMap.get(this.getDirection()).createBitmapFrame();
+
+		// Erstes zeichnen; Kartenposition setzen
+		if (this.getPosition().x == 0){
+			this.setMapPosition(this.getInitialPosition());
+		}
+
+		canvas.drawBitmap(frame, this.getPosition().x, this.getPosition().y + 200, null);
 
 		this.move();
 	}
@@ -110,21 +82,85 @@ public class Ghost extends Actor {
 
 	@Override
 	public void move() {
+		if (this.canWalk(this.getNextDirection())) {// Kann in die nächste, angegebene Richtung laufen?
+
+			// Richtungen aktualisieren
+			this.setDirection(this.getNextDirection());
+			Random random = new Random();
+			int randomNum = random.nextInt((4 - 1) + 1) + 1;
+			Log.w("Ghost", "randomdir:" + randomNum);
+			this.setNextDirection(DirectionType.fromOrdinal(randomNum));
+
+			this.modifyPosition();
+
+		} else if(this.canWalk(this.getDirection())){ // Kann in die aktulle Richtung laufen?
+			this.modifyPosition();
+		} else {
+			Random random = new Random();
+			int randomNum = random.nextInt((4 - 1) + 1) + 1;
+			this.setDirection(DirectionType.fromOrdinal(randomNum));
+			randomNum = random.nextInt((4 - 1) + 1) + 1;
+			this.setNextDirection(DirectionType.fromOrdinal(randomNum));
+			//this.move();
+		}
+	}
+
+	public void modifyPosition() {
 		switch (this.getDirection()) {
 			case Down:
-				this.getPosition().y += this.speed;
+				this.getPosition().y += this.getSpeed();
 				break;
 			case Up:
-				this.getPosition().y -= this.speed;
+				this.getPosition().y -= this.getSpeed();
 			break;
 			case Right :
-				this.getPosition().x += this.speed;
+				this.getPosition().x += this.getSpeed();
 				break;
 			case Left :
-				this.getPosition().x -= this.speed;
+				this.getPosition().x -= this.getSpeed();
 				break;
 			case None :
 				break;
 		}
+	}
+
+	public Animation getDownAnimation() {
+		return downAnimation;
+	}
+
+	public void setDownAnimation(Animation downAnimation) {
+		this.downAnimation = downAnimation;
+	}
+
+	public Animation getRightAnimation() {
+		return rightAnimation;
+	}
+
+	public void setRightAnimation(Animation rightAnimation) {
+		this.rightAnimation = rightAnimation;
+	}
+
+	public Animation getTopAnimation() {
+		return topAnimation;
+	}
+
+	public void setTopAnimation(Animation topAnimation) {
+		this.topAnimation = topAnimation;
+	}
+
+	public Animation getLeftAnimation() {
+		return leftAnimation;
+	}
+
+	public void setLeftAnimation(Animation leftAnimation) {
+		this.leftAnimation = leftAnimation;
+	}
+
+	public HashMap<DirectionType, Animation> getAnimationMap() {
+		return animationMap;
+	}
+
+	public void setAnimationMap(HashMap<DirectionType, Animation> animationMap) {
+		this.animationMap = animationMap;
 	}
 }

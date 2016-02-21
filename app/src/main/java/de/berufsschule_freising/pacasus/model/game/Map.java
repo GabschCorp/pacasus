@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.security.auth.callback.CallbackHandler;
 
 /**
  * Created by Julian on 21.10.2015.
@@ -75,14 +74,11 @@ public class Map implements IDrawable {
 
         String content = new String(contentBytes);
 
-        Log.w("Map", content);
-
         char[] contentChars = content.toCharArray();
 
         // set charmap
         ArrayList<Character> tmpList = new ArrayList<>();
         for (char c : contentChars){ // Get Columncount and rowCount
-            Log.w("Map", String.valueOf(c));
             if (c == '\n'){
                 continue;
             }
@@ -103,16 +99,11 @@ public class Map implements IDrawable {
             }
         }
 
-        Log.w("Map", "charmap set");
-        Log.w("Map", String.valueOf(this.charMap.size()));
-        Log.w("Map", String.valueOf(this.charMap.get(1).size()));
-
 
         // Compute Grid Unit Length
         // CanvasWidth / AnzahlZeichenProZeile
         //this.GridUnitLength = this.width / this.charMap.size();
         this.GridUnitLength = 30;
-        Log.w("Map", "GridUnitLenght:" + this.getGridUnitLength());
 
     }
 
@@ -130,7 +121,6 @@ public class Map implements IDrawable {
 
     public void setCanvas(Canvas canvas){
         this.canvas = canvas;
-        Log.w("Map:width", String.valueOf(canvas.getWidth()));
         this.GridUnitLength = this.getCanvas().getWidth() / this.charMap.get(0).size();
 
     }
@@ -243,10 +233,6 @@ public class Map implements IDrawable {
     }
 
 	public char getCharAtPoint(Point pos){
-        Log.w("map-x", String.valueOf(pos.x));
-        Log.w("map-y", String.valueOf(pos.y));
-        //Log.w("map-xl", String.valueOf(this.charMap.size()));
-        //Log.w("map-yl", String.valueOf(this.charMap.get(pos.y).size()));
 
         if (this.charMap.get(0).size() >= pos.x && pos.x >= 0 &&
                this.charMap.size() >= pos.y && pos.y >= 0){

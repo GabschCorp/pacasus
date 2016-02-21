@@ -1,5 +1,6 @@
 package de.berufsschule_freising.pacasus.model.game;
 
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Point;
@@ -19,6 +20,8 @@ public abstract class Actor implements IActor {
 
 	private DirectionType direction = DirectionType.None;
 	private DirectionType nextDirection = DirectionType.None;
+
+	private AssetManager assetManager;
 
 	private float speed = 10;
 
@@ -49,6 +52,35 @@ public abstract class Actor implements IActor {
 
 	// public abstract boolean intersects(Actor actor);
 
+
+	public boolean canWalk(DirectionType dir){
+		Point mapPos = this.getMapPosition();
+
+		if (DirectionType.Up == dir){
+			mapPos.y--;
+		}
+		else if (DirectionType.Down == dir){
+			mapPos.y++;
+		}
+		else if (DirectionType.Right == dir){
+			mapPos.x++;
+		}
+		else if (DirectionType.Left == dir){
+			mapPos.x--;
+		}
+
+		// TODO: Richtung plus/minus 1
+		char tmp;
+		tmp = this.getMap().getCharAtPoint(mapPos);
+		if (Character.isWhitespace(tmp) ||
+				tmp == '*' ||
+				tmp == 'p'){
+
+
+			return true;
+		}
+		return false;
+	}
 	
 	@Override
 	public abstract void clear();
@@ -141,6 +173,13 @@ public abstract class Actor implements IActor {
 		this.setPosition(new PointF(pos.x * this.map.getGridUnitLength(), pos.y * this.map.getGridUnitLength()));
 	}
 
+	public Point getMapPosition(){
+		float x = this.getPosition().x / (this.getMap().getGridUnitLength());
+		float y = this.getPosition().y / (this.getMap().getGridUnitLength());
+
+		return new Point((int)x, (int)y);
+	}
+
 	private void setPosition(PointF pos){
 		this.position = pos;
 	}
@@ -164,5 +203,14 @@ public abstract class Actor implements IActor {
 	public void setInitialPosition(Point initialPosition) {
 		this.initialPosition = initialPosition;
 	}
+
+	public AssetManager getAssetManager() {
+		return assetManager;
+	}
+
+	public void setAssetManager(AssetManager assetManager) {
+		this.assetManager = assetManager;
+	}
+
 
 }

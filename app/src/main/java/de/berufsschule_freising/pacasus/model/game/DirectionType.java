@@ -8,5 +8,9 @@ public enum DirectionType {
 	Up,
 	Right,
 	Down,
-	Left
+	Left;
+
+	public static DirectionType fromOrdinal(int ordinal){
+		return values()[ordinal];
+	}
 }
