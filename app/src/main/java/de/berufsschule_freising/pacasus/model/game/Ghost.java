@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 
@@ -44,11 +45,11 @@ public class Ghost extends Actor {
 //		Inky blau
 //		Blinky Rot
 //		Pinky Pinky
-	public Ghost(String name, PointF initialPosition, Resources resouces) {
+	public Ghost(String name, Point initialPosition, Resources resouces) {
 		this();
 
 		this.name = name;
-		this.position = initialPosition;
+		// this.position = initialPosition;
 		this.setDirection(DirectionType.Down);
 
 		this.animationMap = new HashMap<>();

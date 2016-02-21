@@ -45,7 +45,7 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 
 		pac = new Pacman(new Point(1,1), context.getResources(), this.map);
 
-//		this.blinky = new Ghost("Blinky", new PointF(50, 50), context.getResources());
+		this.blinky = new Ghost("Blinky", new Point(16, 12), context.getResources());
 	}
 
 	public boolean onTouchEvent(MotionEvent ev){
@@ -93,15 +93,15 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 		if (Math.abs(distanceX) > Math.abs(distanceY)){
 			if (distanceX < 0){
-				this.pac.setDirection(DirectionType.Right);
+				this.pac.addDirection(DirectionType.Right);
 			} else {
-				this.pac.setDirection(DirectionType.Left);
+				this.pac.addDirection(DirectionType.Left);
 			}
 		} else {
 			if (distanceY < 0){
-				this.pac.setDirection(DirectionType.Down);
+				this.pac.addDirection(DirectionType.Down);
 			} else {
-				this.pac.setDirection(DirectionType.Up);
+				this.pac.addDirection(DirectionType.Up);
 			}
 		}
 

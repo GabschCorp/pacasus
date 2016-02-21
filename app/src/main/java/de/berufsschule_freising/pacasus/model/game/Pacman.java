@@ -24,23 +24,10 @@ public class Pacman extends Actor {
 	private Paint paint;
 
 	// initialMapPosition;
-	private Point initialPosition;
 
-	//private PointF mapPosition; // Position in GridUnitLenghts innerhalb der Map; bin ich berechenbar??
-
-	private DirectionType direction = DirectionType.None;
-	private DirectionType nextDirection = DirectionType.None;
-	private float speed = 10;
-
-	private Resources resources;
-
-	private Animation currentAnimation;
 	private Animation stayAnimation;
 	private Animation runAnimation;
 	private Animation dieAnimation;
-
-	private Map map;
-	private float scaleFactor;
 
 	public Pacman(){
 		super();
@@ -52,12 +39,12 @@ public class Pacman extends Actor {
 		this.paint.setColor(Color.YELLOW);
 	}
 
-
-
 	public Pacman(Point initialPosition, Resources resources, Map map){
 		this();
 
-		this.map = map;
+		this.setMap(map);
+
+		this.setSpeed(map.getGridUnitLength() / 4);
 
 		this.stayAnimation = new Animation(resources, R.drawable.pacman_characters);
 		this.stayAnimation.setColumns(8);
@@ -65,7 +52,7 @@ public class Pacman extends Actor {
 		this.stayAnimation.setEndFrame(0);
 		this.stayAnimation.setStartFrame(0);
 
-		this.currentAnimation = stayAnimation;
+		this.setCurrentAnimation(stayAnimation);
 
 		this.runAnimation = new Animation(resources, R.drawable.pacman_characters);
 		this.runAnimation.setColumns(8);
@@ -73,20 +60,14 @@ public class Pacman extends Actor {
 		this.runAnimation.setEndFrame(4);
 		this.runAnimation.setStartFrame(0);
 
-		// Scalings for Animation
-		this.stayAnimation.setScaleHeight(this.map.getGridUnitLength());
-		this.stayAnimation.setScaleWidth(this.map.getGridUnitLength());
-		this.runAnimation.setScaleHeight(this.map.getGridUnitLength());
-		this.runAnimation.setScaleWidth(this.map.getGridUnitLength());
-
 		int frameWidth = this.runAnimation.getFrameWidth();
-		this.scaleFactor = this.map.getGridUnitLength() / frameWidth;
+		this.setScaleFactor(this.getMap().getGridUnitLength() / frameWidth);
 				// 100 (pacframe ) = 302px
 				// x 			 = gridunitlegnt
 
-		this.resources = resources;
+		this.setResources(resources);
 
-		this.initialPosition = initialPosition;
+		this.setInitialPosition(initialPosition);
 	}
 
 
@@ -96,39 +77,39 @@ public class Pacman extends Actor {
 		if (this.canWalk(this.getNextDirection()) && this.getNextDirection() != DirectionType.None) {// Kann in die nächste, angegebene Richtung laufen?
 
 			// Richtungen aktualisieren
-			this.direction = this.getNextDirection();
-			this.setDirection(DirectionType.None);
+			this.setDirection(this.getNextDirection());
+			this.setNextDirection(DirectionType.None);
 
 			this.modifyPosition();
 
 		} else if(this.canWalk(this.getDirection())){ // Kann in die aktulle Richtung laufen?
 			this.modifyPosition();
 		} else { // Stop
-			this.direction = DirectionType.None;
-			this.currentAnimation = this.stayAnimation;
+			this.setDirection(DirectionType.None);
+			this.setCurrentAnimation(this.stayAnimation);
 	}
 	}
 
 	private void modifyPosition(){
 		switch (this.getDirection()) {
 			case Down:
-				this.currentAnimation = this.runAnimation;
-				this.getPosition().y += this.speed;
+				this.setCurrentAnimation(this.runAnimation);
+				this.getPosition().y += this.getSpeed();
 				break;
 			case Up:
-				this.currentAnimation = this.runAnimation;
-				this.getPosition().y -= this.speed;
+				this.setCurrentAnimation(this.runAnimation);
+				this.getPosition().y -= this.getSpeed();
 				break;
 			case Right:
-				this.currentAnimation = this.runAnimation;
-				this.getPosition().x += this.speed;
+				this.setCurrentAnimation(this.runAnimation);
+				this.getPosition().x += this.getSpeed();
 				break;
 			case Left:
-				this.currentAnimation = this.runAnimation;
-				this.getPosition().x -= this.speed;
+				this.setCurrentAnimation(this.runAnimation);
+				this.getPosition().x -= this.getSpeed();
 				break;
 			case None:
-				this.currentAnimation = this.stayAnimation;
+				this.setCurrentAnimation(this.stayAnimation);
 				break;
 		}
 	}
@@ -151,9 +132,12 @@ public class Pacman extends Actor {
 
 		// TODO: Richtung plus/minus 1
 		char tmp;
-		tmp = this.map.getCharAtPoint(mapPos);
+		tmp = this.getMap().getCharAtPoint(mapPos);
 		Log.w("Map", String.valueOf(tmp));
-		if (Character.isWhitespace(tmp)){
+		if (Character.isWhitespace(tmp) ||
+				tmp == '*' ||
+				tmp == 'p'){
+
 
 			return true;
 		}
@@ -164,10 +148,10 @@ public class Pacman extends Actor {
 		Log.w("Pacman", String.valueOf(this.getPosition().x));
 		Log.w("Pacman", String.valueOf(this.getPosition().y));
 
-		float x = this.getPosition().x / (this.map.getGridUnitLength());
-		float y = this.getPosition().y / (this.map.getGridUnitLength());
+		float x = this.getPosition().x / (this.getMap().getGridUnitLength());
+		float y = this.getPosition().y / (this.getMap().getGridUnitLength());
 
-		return new Point((int)Math.ceil((double) x), (int)Math.ceil((double) y));
+		return new Point((int)x, (int)y);
 	}
 
 	@Override
@@ -182,41 +166,21 @@ public class Pacman extends Actor {
 		Matrix oMat = new Matrix();
 		canvas.setMatrix(oMat);
 
+		this.getCurrentAnimation().setScaleHeight(this.getMap().getGridUnitLength());
+		this.getCurrentAnimation().setScaleWidth(this.getMap().getGridUnitLength());
+		this.getCurrentAnimation().setRotation((this.getDirection().ordinal() - 1) * 90);
+
 		// Get Animationframe
-		this.currentAnimation.setRotation((this.getDirection().ordinal() - 1) * 90);
-		Bitmap frame = this.currentAnimation.createBitmapFrame();
+		Bitmap frame = this.getCurrentAnimation().createBitmapFrame();
 
 		// Erstes zeichnen; Kartenposition setzen
 		if (this.getPosition().x == 0){
-			this.setMapPosition(this.initialPosition);
+			this.setMapPosition(this.getInitialPosition());
 		}
 
-		canvas.drawBitmap(frame, this.getPosition().x, this.getPosition().y +200, null);
+		canvas.drawBitmap(frame, this.getPosition().x, this.getPosition().y + 200, null);
 
 		this.move();
 	}
 
-	public void setMapPosition(Point pos){
-		this.setPosition(new PointF(pos.x * this.map.getGridUnitLength(), pos.y * this.map.getGridUnitLength()));
-	}
-
-	private void setPosition(PointF pos){
-		this.position = pos;
-	}
-
-	public void setDirection(DirectionType dir){
-		if (this.direction == DirectionType.None){
-			this.direction = dir;
-		} else {
-			this.nextDirection = dir;
-		}
-	}
-
-	public DirectionType getDirection(){
-		return this.direction;
-	}
-
-	public DirectionType getNextDirection(){
-		return this.nextDirection;
-	}
 }

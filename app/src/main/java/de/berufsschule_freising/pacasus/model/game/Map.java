@@ -35,7 +35,7 @@ public class Map implements IDrawable {
     private Color foregroundColor;
 
     // TODO: Const Wand-offset; Wand abflachen
-    private float wallOffsetPercentage = 0.25f;
+    private float wallOffsetPercentage = 0.5f;
 
     private int width;
     private int height;
@@ -54,6 +54,7 @@ public class Map implements IDrawable {
         this.assetManager = am;
 
         this.paint = new Paint();
+        this.paint.setStrokeWidth(2);
         this.paint.setStyle(Paint.Style.STROKE);
         this.paint.setColor(Color.BLUE);
     }
@@ -162,58 +163,64 @@ public class Map implements IDrawable {
 
     private void renderMap(){
         canvas = this.getCanvas();
-
+        canvas.drawColor(Color.BLACK);
 //        Bitmap bmp = Bitmap.createBitmap((int)this.getGridUnitLength() * this.charMap.get(0).size(),
 //                (int)this.getGridUnitLength() * this.charMap.size(), Bitmap.Config.ARGB_8888);
 //        canvas = new Canvas(bmp);
 
-        for (int row = 0; row < this.charMap.size(); row++) { // row
-            for (int column = 0; column < this.charMap.get(row).size(); column++) { // columns
-                char c = this.charMap.get(row).get(column);
+        for (int rowIter = 0; rowIter < this.charMap.size(); rowIter++) { // row
+            for (int columnIter = 0; columnIter < this.charMap.get(rowIter).size(); columnIter++) { // columns
+                char c = this.charMap.get(rowIter).get(columnIter);
+
+				int column = columnIter + 1;
+				int row  = rowIter + 1;
+
                 switch (c) {
                     case '╔':
-                        canvas.drawArc((float)(column) * this.GridUnitLength + this.getWallOffset(),
-                                (float)(row) * this.GridUnitLength + this.getWallOffset(),
-                                (float)(column + 2) * this.GridUnitLength + this.getWallOffset(),
-                                (float)(row + 2) * this.GridUnitLength + this.getWallOffset(), 180f, 90f, false, this.paint);
+                        canvas.drawArc(column * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(),
+                                row * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(),
+                                column * this.GridUnitLength + this.GridUnitLength / 2 + this.getWallOffset(),
+                                row * this.GridUnitLength + this.GridUnitLength / 2 + this.getWallOffset(), 180f, 90f, false, this.paint);
                         break;
                     case '╗':
-                        canvas.drawArc((float)(column - 1) * this.GridUnitLength - this.getWallOffset(),
-                                (float)(row) * this.GridUnitLength + this.getWallOffset(),
-                                (float)(column + 1) * this.GridUnitLength - this.getWallOffset(),
-                                (float)(row + 2) * this.GridUnitLength + this.getWallOffset(), 270f, 90f, false, this.paint);
+                        canvas.drawArc(column * this.GridUnitLength - this.GridUnitLength / 2 - this.getWallOffset(),
+                                row * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(),
+                                column * this.GridUnitLength + this.GridUnitLength / 2 - this.getWallOffset(),
+                                row * this.GridUnitLength + this.GridUnitLength / 2 + this.getWallOffset(), 270f, 90f, false, this.paint);
                         break;
                     case '╚':
-                        canvas.drawArc((float)column * this.GridUnitLength + this.getWallOffset(),
-                                (float)(row - 1) * this.GridUnitLength - this.getWallOffset(),
-                                (float)(column + 2) * this.GridUnitLength,
-                                (float)(row + 1) * this.GridUnitLength - this.getWallOffset(), 90f, 90f, false, this.paint);
+                        canvas.drawArc(column * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(),
+                                row * this.GridUnitLength - this.GridUnitLength / 2 - this.getWallOffset(),
+                                column * this.GridUnitLength + this.GridUnitLength / 2,
+                                row * this.GridUnitLength + this.GridUnitLength / 2 - this.getWallOffset(), 90f, 90f, false, this.paint);
                         break;
                     case '╝':
-                        canvas.drawArc((float)(column - 1) * this.GridUnitLength - this.getWallOffset(),
-                                (float)(row - 1) * this.GridUnitLength - this.getWallOffset(),
-                                (float)(column + 1) * this.GridUnitLength - this.getWallOffset(),
-                                (float)(row + 1) * this.GridUnitLength - this.getWallOffset(), 0, 90f, false, this.paint);
+                        canvas.drawArc(column * this.GridUnitLength - this.GridUnitLength / 2 - this.getWallOffset(),
+                                row * this.GridUnitLength - this.GridUnitLength / 2 - this.getWallOffset(),
+                                column * this.GridUnitLength + this.GridUnitLength / 2 - this.getWallOffset(),
+                                row * this.GridUnitLength + this.GridUnitLength / 2 - this.getWallOffset(), 0, 90f, false, this.paint);
                         break;
                     case '═':
-                        canvas.drawLine(column * this.GridUnitLength,
-                                row * this.GridUnitLength + this.getWallOffset(),
-                                (column + 1) * this.GridUnitLength,
-                                (row) * this.GridUnitLength + this.getWallOffset(), this.paint);
-                        canvas.drawLine(column * this.GridUnitLength,
-                                (row + 1) * this.GridUnitLength - this.getWallOffset(),
-                                (column + 1) * this.GridUnitLength,
-                                (row + 1) * this.GridUnitLength - this.getWallOffset(), this.paint);
+                        canvas.drawLine(column * this.GridUnitLength - this.GridUnitLength / 2,
+                                row * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(),
+                                column * this.GridUnitLength + this.GridUnitLength / 2,
+                                row * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(), this.paint);
+
+                        canvas.drawLine(column * this.GridUnitLength - this.GridUnitLength / 2,
+                                row * this.GridUnitLength  + this.GridUnitLength / 2 - this.getWallOffset(),
+                                column * this.GridUnitLength + this.GridUnitLength / 2,
+                                row * this.GridUnitLength   + this.GridUnitLength / 2 - this.getWallOffset(), this.paint);
                         break;
                     case '║':
-                        canvas.drawLine(column * this.GridUnitLength + this.getWallOffset(),
-                                row * this.GridUnitLength,
-                                (column) * this.GridUnitLength + this.getWallOffset(),
-                                (row + 1) * this.GridUnitLength, this.paint);
-                        canvas.drawLine((column + 1) * this.GridUnitLength - this.getWallOffset(),
-                                row * this.GridUnitLength,
-                                (column + 1) * this.GridUnitLength - this.getWallOffset(),
-                                (row + 1) * this.GridUnitLength, this.paint);
+                        canvas.drawLine(column * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(),
+                                row * this.GridUnitLength - this.GridUnitLength / 2,
+                                column * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(),
+                                row * this.GridUnitLength + this.GridUnitLength / 2, this.paint);
+
+                        canvas.drawLine(column * this.GridUnitLength + this.GridUnitLength / 2 - this.getWallOffset(),
+                                row * this.GridUnitLength - this.GridUnitLength / 2,
+                                column * this.GridUnitLength + this.GridUnitLength / 2 - this.getWallOffset(),
+                                row * this.GridUnitLength + this.GridUnitLength / 2, this.paint);
                         break;
                 }
             }
