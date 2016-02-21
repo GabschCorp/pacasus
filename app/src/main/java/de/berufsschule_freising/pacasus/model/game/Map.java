@@ -27,6 +27,9 @@ public class Map implements IDrawable {
 
     private Bitmap bitmapMap = null;
 
+    private List<Dot> dotList = new ArrayList<>();
+    private List<Pill> pillList = new ArrayList<>();
+
     private int thickness;
 
     private Paint paint;
@@ -59,13 +62,6 @@ public class Map implements IDrawable {
     }
 
     public void parse() throws Exception {
-//        if (this.width == 0 || this.height == 0){
-//            throw new Exception("Width and Height must be set");
-//        }
-//        if (this.canvas == null){
-//            throw new Exception("Canvas must be set");
-//        }
-
         this.io = this.assetManager.open("maps/proof");
 
         byte[] contentBytes = new byte[this.io.available()];
@@ -89,13 +85,25 @@ public class Map implements IDrawable {
                 this.charMap.add(this.charMap.size(), tmpList);
                 tmpList = new ArrayList<>();
 
+                // Dot
+//                if (c == '*'){
+//                    Log.w("Map-Dot", "found");
+//                    this.dotList.add(new Dot(this, new Point(tmpList.size() - 1, this.charMap.size() - 1)));
+//                }
+                // Pill
+
             }
         }
         this.charMap.add(this.charMap.size(), tmpList); // Letzte Zeile hinzufügen
 
         for (int i = 0; i < this.charMap.size(); i++) { // row
             for (int j = 0; j < this.charMap.get(i).size(); j++) { // columns
-                Log.w("Map" + i, String.valueOf(this.charMap.get(i).get(j)));
+                if (this.charMap.get(i).get(j) == '*') {
+                    this.dotList.add(new Dot(this, new Point(j + 1, i + 1)));
+                }
+                if (this.charMap.get(i).get(j) == 'p') {
+                    this.pillList.add(new Pill(this, new Point(j + 1, i + 1)));
+                }
             }
         }
 
@@ -147,6 +155,18 @@ public class Map implements IDrawable {
         //if (this.bitmapMap == null){
             this.renderMap();
         //}
+
+        // RenderDots
+        for (Dot d : this.dotList){
+            d.setCanvas(this.getCanvas());
+            d.render();
+        }
+
+        // RenderPills
+        for (Pill p : this.pillList){
+            p.setCanvas(this.getCanvas());
+            p.render();
+        }
 
         //this.canvas.drawBitmap(this.bitmapMap, 0, 200, null);
     }

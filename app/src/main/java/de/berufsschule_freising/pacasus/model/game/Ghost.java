@@ -88,7 +88,6 @@ public class Ghost extends Actor {
 			this.setDirection(this.getNextDirection());
 			Random random = new Random();
 			int randomNum = random.nextInt((4 - 1) + 1) + 1;
-			Log.w("Ghost", "randomdir:" + randomNum);
 			this.setNextDirection(DirectionType.fromOrdinal(randomNum));
 
 			this.modifyPosition();
