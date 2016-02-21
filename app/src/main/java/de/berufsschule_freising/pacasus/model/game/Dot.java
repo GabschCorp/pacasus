@@ -21,10 +21,10 @@ public class Dot extends AbstractPoint implements IDrawable{
 
 	@Override
 	public void render() {
-
-		PointF drawingPosition = this.getPositionByMapPosition();
-
-		this.getCanvas().drawArc(drawingPosition.x - 2, drawingPosition.y - 2, drawingPosition.x + 2, drawingPosition.y + 2, 0, 360, true, this.getPaint());
+		if (!this.isEaten()){
+			PointF drawingPosition = this.getPositionByMapPosition();
+			this.getCanvas().drawArc(drawingPosition.x - 2, drawingPosition.y - 2, drawingPosition.x + 2, drawingPosition.y + 2, 0, 360, true, this.getPaint());
+		}
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -82,6 +83,13 @@ public class Pacman extends Actor {
 
 	@Override
 	public void move() {
+		// pillen essen
+		AbstractPoint dot;
+		if ((dot = this.getMap().getEatablePointByPosition(this.getMapPosition())) != null){
+			Log.w("Pacman", "dot found: bon appetit");
+			dot.eat();
+		}
+
 		if (this.canWalk(this.getNextDirection()) && this.getNextDirection() != DirectionType.None) {// Kann in die nächste, angegebene Richtung laufen?
 
 			// Richtungen aktualisieren

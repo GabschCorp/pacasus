@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.util.Log;
 
 /**
  * Created by Jooly on 21.02.2016.
@@ -15,6 +16,8 @@ public abstract class AbstractPoint {
 
 	private Point mapPosition;
 	private Canvas canvas;
+
+	private boolean isEaten = false;
 
 	private Map map;
 
@@ -29,6 +32,11 @@ public abstract class AbstractPoint {
 		position.y = this.getMap().getGridUnitLength() * this.getMapPosition().y;
 
 		return position;
+	}
+
+	public void eat(){
+		this.isEaten = true;
+		Log.w("AbstractPoint", "nom nom nom");
 	}
 
 	public Point getMapPosition() {
@@ -57,5 +65,9 @@ public abstract class AbstractPoint {
 
 	public Paint getPaint() {
 		return paint;
+	}
+
+	public boolean isEaten() {
+		return isEaten;
 	}
 }

@@ -99,10 +99,10 @@ public class Map implements IDrawable {
         for (int i = 0; i < this.charMap.size(); i++) { // row
             for (int j = 0; j < this.charMap.get(i).size(); j++) { // columns
                 if (this.charMap.get(i).get(j) == '*') {
-                    this.dotList.add(new Dot(this, new Point(j + 1, i + 1)));
+                    this.dotList.add(new Dot(this, new Point(j+1, i+1)));
                 }
                 if (this.charMap.get(i).get(j) == 'p') {
-                    this.pillList.add(new Pill(this, new Point(j + 1, i + 1)));
+                    this.pillList.add(new Pill(this, new Point(j+1, i+1), this.assetManager));
                 }
             }
         }
@@ -261,4 +261,17 @@ public class Map implements IDrawable {
 
         return '*';
 	}
+
+    public AbstractPoint getEatablePointByPosition(Point pos){
+
+        for (Dot d : this.dotList) {
+
+            if (d.getMapPosition() == pos) {
+                Log.w("Map", "dot found: bon appetit");
+                return d;
+            }
+        }
+
+        return null;
+    }
 }
