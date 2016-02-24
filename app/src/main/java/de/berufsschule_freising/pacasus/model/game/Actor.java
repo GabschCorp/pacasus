@@ -50,7 +50,17 @@ public abstract class Actor implements IActor {
 		this.id = id;
 	}
 
-	// public abstract boolean intersects(Actor actor);
+	public boolean isIntersect(Actor actor){
+		// Differenz(-Vector) kleiner/gleich einer Längeneinheit
+		if (Math.abs(this.getPosition().x - actor.getPosition().x) <= this.getMap().getGridUnitLength() &&
+				Math.abs(this.getPosition().y  - actor.getPosition().y) <= this.getMap().getGridUnitLength()){
+			return true;
+		}
+
+		return false;
+	}
+
+	// public abstract boolean isIntersect(Actor actor);
 
 
 	public boolean canWalk(DirectionType dir){

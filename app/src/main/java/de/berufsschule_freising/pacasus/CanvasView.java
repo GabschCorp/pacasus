@@ -8,8 +8,12 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.berufsschule_freising.pacasus.model.game.DirectionType;
+import de.berufsschule_freising.pacasus.model.game.GameState;
 import de.berufsschule_freising.pacasus.model.game.Ghost;
 import de.berufsschule_freising.pacasus.model.game.GhostFactory;
 import de.berufsschule_freising.pacasus.model.game.Map;
@@ -22,6 +26,9 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 
 	private GestureDetector gestureDetector;
 	private Pacman pac;
+
+	private List<Ghost> ghostList;
+
 	private Ghost blinky;
 	private Ghost inky;
 	private Ghost clyde;
@@ -47,10 +54,11 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 
 		pac = new Pacman(new Point(1,1), context.getAssets(), this.map);
 
-		this.blinky = GhostFactory.createBlinky(this.map, new Point(11, 16),context.getAssets());
-		this.clyde = GhostFactory.createClyde(this.map, new Point(11, 16), context.getAssets());
-		this.inky = GhostFactory.createInky(this.map, new Point(11, 16), context.getAssets());
-		this.pinky = GhostFactory.createPinky(this.map, new Point(11, 16), context.getAssets());
+		this.ghostList = new ArrayList<>();
+		this.ghostList.add(GhostFactory.createBlinky(this.map, new Point(11, 16), context.getAssets()));
+		this.ghostList.add(GhostFactory.createClyde(this.map, new Point(11, 16), context.getAssets()));
+		this.ghostList.add(GhostFactory.createInky(this.map, new Point(11, 16), context.getAssets()));
+		this.ghostList.add(GhostFactory.createPinky(this.map, new Point(11, 16), context.getAssets()));
 	}
 
 	public boolean onTouchEvent(MotionEvent ev){
@@ -67,16 +75,21 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 		// Evtl mit GameTime
 		this.map.setCanvas(canvas);
 		this.pac.setCanvas(canvas);
-		this.blinky.setCanvas(canvas);
-		this.clyde.setCanvas(canvas);
-		this.inky.setCanvas(canvas);
-		this.pinky.setCanvas(canvas);
 
 		this.map.render();
-		this.blinky.render();
-		this.clyde.render();
-		this.inky.render();
-		this.pinky.render();
+
+		for (Ghost ghost : this.ghostList){
+			ghost.setCanvas(canvas);
+			ghost.render();
+
+			if (ghost.isIntersect(this.pac)){
+				if (GameState.getInstance().isEatable()){
+					this.pac.eatGhost(ghost);
+				} else {
+					this.pac.die();
+				}
+			}
+		}
 		this.pac.render();
 
 		try {

@@ -36,7 +36,8 @@ public abstract class AbstractPoint {
 
 	public void eat(){
 		this.isEaten = true;
-		Log.w("AbstractPoint", "nom nom nom");
+
+		this.getMap().removeDotFromList(this);
 	}
 
 	public Point getMapPosition() {

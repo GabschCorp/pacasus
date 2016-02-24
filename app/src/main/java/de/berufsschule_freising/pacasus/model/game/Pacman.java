@@ -21,6 +21,15 @@ import java.io.InputStream;
 // TODO:
 public class Pacman extends Actor {
 
+	// Game
+	private int lives;
+	private int points;
+
+	private final static int POINTS_DOT =  10;
+	private final static int POINTS_PILL = 100;
+	private final static int POINTS_GHOST = 1000;
+
+
 	private Paint paint;
 
 	// initialMapPosition;
@@ -31,6 +40,9 @@ public class Pacman extends Actor {
 
 	public Pacman(){
 		super();
+
+		this.lives = 3;
+		this.points = 0;
 
 		this.setDirection(DirectionType.None);
 
@@ -70,6 +82,12 @@ public class Pacman extends Actor {
 		this.runAnimation.setEndFrame(4);
 		this.runAnimation.setStartFrame(0);
 
+		this.dieAnimation = new Animation(spriteSheet);
+		this.dieAnimation.setColumns(8);
+		this.dieAnimation.setRows(8);
+		this.dieAnimation.setEndFrame(24);
+		this.dieAnimation.setStartFrame(20);
+
 		int frameWidth = this.runAnimation.getFrameWidth();
 		this.setScaleFactor(this.getMap().getGridUnitLength() / frameWidth);
 				// 100 (pacframe ) = 302px
@@ -80,13 +98,42 @@ public class Pacman extends Actor {
 		this.setInitialPosition(initialPosition);
 	}
 
+	public void eatGhost(Ghost ghost){
+		ghost.setMapPosition(ghost.getInitialPosition());
+
+		this.points += Pacman.POINTS_GHOST;
+	}
+
+	public void eatDot(AbstractPoint dot){
+		dot.eat();
+
+		if (dot instanceof Pill){
+			this.points += Pacman.POINTS_PILL;
+		} else {
+			this.points += Pacman.POINTS_DOT;
+		}
+	}
+
+	public void die(){
+		this.lives--;
+
+		this.setCurrentAnimation(this.dieAnimation);
+		this.setDirection(DirectionType.None);
+
+		// stop game
+		// run die animation
+		// reset game
+		//
+	}
 
 	@Override
 	public void move() {
 		// pillen essen
 		AbstractPoint dot;
 		if ((dot = this.getMap().getEatablePointByPosition(this.getMapPosition())) != null){
-			Log.w("Pacman", "dot found: bon appetit");
+			if (dot instanceof Pill){
+				GameState.getInstance().startEatable();
+			}
 			dot.eat();
 		}
 
@@ -125,7 +172,6 @@ public class Pacman extends Actor {
 				this.getPosition().x -= this.getSpeed();
 				break;
 			case None:
-				this.setCurrentAnimation(this.stayAnimation);
 				break;
 		}
 	}

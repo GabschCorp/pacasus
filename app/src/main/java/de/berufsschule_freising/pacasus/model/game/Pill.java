@@ -47,20 +47,22 @@ public class Pill extends AbstractPoint implements IDrawable{
 
 	@Override
 	public void render() {
+		if (!this.isEaten()) {
 
-		PointF drawingPosition = this.getPositionByMapPosition();
+			PointF drawingPosition = this.getPositionByMapPosition();
 
-		this.pillFrame.setScaleHeight(this.getMap().getGridUnitLength());
-		this.pillFrame.setScaleWidth(this.getMap().getGridUnitLength());
+			this.pillFrame.setScaleHeight(this.getMap().getGridUnitLength());
+			this.pillFrame.setScaleWidth(this.getMap().getGridUnitLength());
 
-		this.getCanvas().setMatrix(new Matrix());
+			this.getCanvas().setMatrix(new Matrix());
 
-		// TODO : vom Asset rendern
+			// TODO : vom Asset rendern
 //		this.getCanvas().drawBitmap(this.pillFrame.createBitmapFrame(),
 //				this.getPositionByMapPosition().x,
 //				this.getPositionByMapPosition().y + 200, null);
 
-		this.getCanvas().drawArc(drawingPosition.x - 7, drawingPosition.y - 7 + 200, drawingPosition.x + 7, drawingPosition.y + 7 + 200, 0, 360, true, this.getPaint());
+			this.getCanvas().drawArc(drawingPosition.x - 7, drawingPosition.y - 7 + 200, drawingPosition.x + 7, drawingPosition.y + 7 + 200, 0, 360, true, this.getPaint());
+		}
 	}
 
 	@Override

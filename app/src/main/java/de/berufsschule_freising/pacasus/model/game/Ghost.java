@@ -30,6 +30,8 @@ public class Ghost extends Actor {
 	private Animation leftAnimation;
 	private Animation downAnimation;
 
+	private Animation eatableAnimation;
+
 	public Ghost(){
 //		this.paint = new Paint();
 //		this.p
@@ -48,6 +50,21 @@ public class Ghost extends Actor {
 		this.setInitialPosition(initialPosition);
 		this.setAssetManager(am);
 
+		InputStream spriteSheetInputStream;
+		Bitmap spriteSheet = null;
+		try {
+			spriteSheetInputStream = this.getAssetManager().open("pacman_characters.png");
+			spriteSheet = BitmapFactory.decodeStream(spriteSheetInputStream);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		this.eatableAnimation = new Animation(spriteSheet);
+		this.eatableAnimation.setColumns(8);
+		this.eatableAnimation.setRows(8);
+		this.eatableAnimation.setStartFrame(30);
+		this.eatableAnimation.setEndFrame(32);
+
 		this.setDirection(DirectionType.Right);
 		this.setNextDirection(DirectionType.Left);
 
@@ -62,8 +79,15 @@ public class Ghost extends Actor {
 
 		this.animationMap.get(this.getDirection()).setScaleHeight(this.getMap().getGridUnitLength());
 		this.animationMap.get(this.getDirection()).setScaleWidth(this.getMap().getGridUnitLength());
+		this.eatableAnimation.setScaleHeight(this.getMap().getGridUnitLength());
+		this.eatableAnimation.setScaleWidth(this.getMap().getGridUnitLength());
 
-		Bitmap frame = this.animationMap.get(this.getDirection()).createBitmapFrame();
+		Bitmap frame;
+		if (GameState.getInstance().isEatable()){
+			frame = this.eatableAnimation.createBitmapFrame();
+		} else {
+			frame = this.animationMap.get(this.getDirection()).createBitmapFrame();
+		}
 
 		// Erstes zeichnen; Kartenposition setzen
 		if (this.getPosition().x == 0){

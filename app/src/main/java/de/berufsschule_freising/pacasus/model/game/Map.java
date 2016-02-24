@@ -265,13 +265,26 @@ public class Map implements IDrawable {
     public AbstractPoint getEatablePointByPosition(Point pos){
 
         for (Dot d : this.dotList) {
-
-            if (d.getMapPosition() == pos) {
-                Log.w("Map", "dot found: bon appetit");
+            if (d.getMapPosition().x -1 == pos.x &&
+                    d.getMapPosition().y -1 == pos.y){
                 return d;
+            }
+        }
+        for (Pill p : this.pillList){
+            if (p.getMapPosition().x -1 == pos.x &&
+                    p.getMapPosition().y -1 == pos.y){
+                return p;
             }
         }
 
         return null;
+    }
+
+    public void removeDotFromList(AbstractPoint dot){
+        if (dot instanceof Pill){
+            this.pillList.remove(this.pillList.indexOf(dot));
+        } else {
+            this.dotList.remove(this.dotList.indexOf(dot));
+        }
     }
 }
