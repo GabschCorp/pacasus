@@ -8,7 +8,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -187,56 +186,68 @@ public class Map implements IDrawable {
 
                 switch (c) {
                     case '╔':
-                        canvas.drawArc(column * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(),
-                                row * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(),
-                                column * this.GridUnitLength + this.GridUnitLength / 2 + this.getWallOffset(),
-                                row * this.GridUnitLength + this.GridUnitLength / 2 + this.getWallOffset(), 180f, 90f, false, this.paint);
+                        canvas.drawArc(getLeftMapPoint(column) + this.getWallOffset(),
+                                getLeftMapPoint(row) + this.getWallOffset(),
+                                getRightMapPoint(column) + this.getWallOffset(),
+                                getRightMapPoint(row) + this.getWallOffset(), 180f, 90f, false, this.paint);
                         break;
                     case '╗':
-                        canvas.drawArc(column * this.GridUnitLength - this.GridUnitLength / 2 - this.getWallOffset(),
-                                row * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(),
-                                column * this.GridUnitLength + this.GridUnitLength / 2 - this.getWallOffset(),
-                                row * this.GridUnitLength + this.GridUnitLength / 2 + this.getWallOffset(), 270f, 90f, false, this.paint);
+                        canvas.drawArc(getLeftMapPoint(column) - this.getWallOffset(),
+                                getLeftMapPoint(row) + this.getWallOffset(),
+                                getRightMapPoint(column) - this.getWallOffset(),
+                                getRightMapPoint(row) + this.getWallOffset(), 270f, 90f, false, this.paint);
                         break;
                     case '╚':
-                        canvas.drawArc(column * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(),
-                                row * this.GridUnitLength - this.GridUnitLength / 2 - this.getWallOffset(),
-                                column * this.GridUnitLength + this.GridUnitLength / 2,
-                                row * this.GridUnitLength + this.GridUnitLength / 2 - this.getWallOffset(), 90f, 90f, false, this.paint);
+                        canvas.drawArc(getLeftMapPoint(column) + this.getWallOffset(),
+                                getLeftMapPoint(row) - this.getWallOffset(),
+                                getRightMapPoint(column),
+                                getRightMapPoint(row) - this.getWallOffset(), 90f, 90f, false, this.paint);
                         break;
                     case '╝':
-                        canvas.drawArc(column * this.GridUnitLength - this.GridUnitLength / 2 - this.getWallOffset(),
-                                row * this.GridUnitLength - this.GridUnitLength / 2 - this.getWallOffset(),
-                                column * this.GridUnitLength + this.GridUnitLength / 2 - this.getWallOffset(),
-                                row * this.GridUnitLength + this.GridUnitLength / 2 - this.getWallOffset(), 0, 90f, false, this.paint);
+                        canvas.drawArc(getLeftMapPoint(column) - this.getWallOffset(),
+                                getLeftMapPoint(row) - this.getWallOffset(),
+                                getRightMapPoint(column) - this.getWallOffset(),
+                                getRightMapPoint(row) - this.getWallOffset(), 0, 90f, false, this.paint);
                         break;
                     case '═':
-                        canvas.drawLine(column * this.GridUnitLength - this.GridUnitLength / 2,
-                                row * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(),
-                                column * this.GridUnitLength + this.GridUnitLength / 2,
-                                row * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(), this.paint);
+                        canvas.drawLine(getLeftMapPoint(column),
+                                getLeftMapPoint(row) + this.getWallOffset(),
+                                getRightMapPoint(column),
+                                getLeftMapPoint(row) + this.getWallOffset(), this.paint);
 
-                        canvas.drawLine(column * this.GridUnitLength - this.GridUnitLength / 2,
-                                row * this.GridUnitLength  + this.GridUnitLength / 2 - this.getWallOffset(),
-                                column * this.GridUnitLength + this.GridUnitLength / 2,
-                                row * this.GridUnitLength   + this.GridUnitLength / 2 - this.getWallOffset(), this.paint);
+                        canvas.drawLine(getLeftMapPoint(column),
+                                getRightMapPoint(row) - this.getWallOffset(),
+                                getRightMapPoint(column),
+                                getRightMapPoint(row) - this.getWallOffset(), this.paint);
                         break;
                     case '║':
-                        canvas.drawLine(column * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(),
-                                row * this.GridUnitLength - this.GridUnitLength / 2,
-                                column * this.GridUnitLength - this.GridUnitLength / 2 + this.getWallOffset(),
-                                row * this.GridUnitLength + this.GridUnitLength / 2, this.paint);
+                        canvas.drawLine(getLeftMapPoint(column) + this.getWallOffset(),
+                                getLeftMapPoint(row),
+                                getLeftMapPoint(column) + this.getWallOffset(),
+                                getRightMapPoint(row), this.paint);
 
-                        canvas.drawLine(column * this.GridUnitLength + this.GridUnitLength / 2 - this.getWallOffset(),
-                                row * this.GridUnitLength - this.GridUnitLength / 2,
-                                column * this.GridUnitLength + this.GridUnitLength / 2 - this.getWallOffset(),
-                                row * this.GridUnitLength + this.GridUnitLength / 2, this.paint);
+                        canvas.drawLine(getRightMapPoint(column) - this.getWallOffset(),
+                                getLeftMapPoint(row),
+                                getRightMapPoint(column) - this.getWallOffset(),
+                                getRightMapPoint(row), this.paint);
                         break;
                 }
             }
         }
 
         //this.bitmapMap = bmp;
+    }
+
+//    private PointF getLine(int column, int row, boolean isHorizontal, boolean isOuter){
+//        float x =
+//    }
+
+    private float getRightMapPoint(int rowOrColumn) {
+        return rowOrColumn * this.GridUnitLength + this.GridUnitLength / 2;
+    }
+
+    private float getLeftMapPoint(int rowOrColumn) {
+        return rowOrColumn * this.GridUnitLength - this.GridUnitLength / 2;
     }
 
     @Override

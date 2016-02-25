@@ -25,6 +25,7 @@ public class Pacman extends Actor {
 	private int lives;
 	private int points;
 
+	// TODO: Zahlen eruieren
 	private final static int POINTS_DOT =  10;
 	private final static int POINTS_PILL = 100;
 	private final static int POINTS_GHOST = 1000;
