@@ -33,15 +33,10 @@ public class Ghost extends Actor {
 	private Animation eatableAnimation;
 
 	public Ghost(){
-//		this.paint = new Paint();
-//		this.p
+
 	}
 
 
-//		Clyde Orange
-//		Inky blau
-//		Blinky Rot
-//		Pinky Pinky
 	public Ghost(String name, Point initialPosition, de.berufsschule_freising.pacasus.model.game.Map map, AssetManager am) {
 		this();
 
@@ -66,7 +61,7 @@ public class Ghost extends Actor {
 		this.eatableAnimation.setEndFrame(32);
 
 		this.setDirection(DirectionType.Right);
-		this.setNextDirection(DirectionType.Left);
+		//this.setNextDirection(DirectionType.Up);
 
 		this.animationMap = new HashMap<>();
 	}
@@ -106,25 +101,12 @@ public class Ghost extends Actor {
 
 	@Override
 	public void move() {
-		if (this.canWalk(this.getNextDirection())) {// Kann in die nächste, angegebene Richtung laufen?
-
-			// Richtungen aktualisieren
-			this.setDirection(this.getNextDirection());
-			Random random = new Random();
-			int randomNum = random.nextInt((4 - 1) + 1) + 1;
-			this.setNextDirection(DirectionType.fromOrdinal(randomNum));
-
-			this.modifyPosition();
-
-		} else if(this.canWalk(this.getDirection())){ // Kann in die aktulle Richtung laufen?
+		if(this.canWalk(this.getDirection())){
 			this.modifyPosition();
 		} else {
 			Random random = new Random();
 			int randomNum = random.nextInt((4 - 1) + 1) + 1;
 			this.setDirection(DirectionType.fromOrdinal(randomNum));
-			randomNum = random.nextInt((4 - 1) + 1) + 1;
-			this.setNextDirection(DirectionType.fromOrdinal(randomNum));
-			//this.move();
 		}
 	}
 

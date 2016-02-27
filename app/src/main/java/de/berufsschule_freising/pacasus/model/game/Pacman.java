@@ -30,6 +30,7 @@ public class Pacman extends Actor {
 	private final static int POINTS_PILL = 100;
 	private final static int POINTS_GHOST = 1000;
 
+	private DirectionType nextDirection = DirectionType.None;
 
 	private Paint paint;
 
@@ -204,6 +205,23 @@ public class Pacman extends Actor {
 		canvas.drawBitmap(frame, this.getPosition().x, this.getPosition().y + 200, null);
 
 		this.move();
+	}
+
+
+	public void addDirection(DirectionType dir){
+		if (this.getDirection() == DirectionType.None){
+			this.setDirection(dir);
+		} else {
+			this.nextDirection = dir;
+		}
+	}
+
+	public DirectionType getNextDirection(){
+		return this.nextDirection;
+	}
+
+	public void setNextDirection(DirectionType dir){
+		this.nextDirection = dir;
 	}
 
 }

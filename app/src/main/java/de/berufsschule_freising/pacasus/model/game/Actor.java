@@ -19,7 +19,6 @@ public abstract class Actor implements IActor {
 	private PointF position = new PointF();
 
 	private DirectionType direction = DirectionType.None;
-	private DirectionType nextDirection = DirectionType.None;
 
 	private AssetManager assetManager;
 
@@ -171,23 +170,15 @@ public abstract class Actor implements IActor {
 		return this.direction;
 	}
 
-	public DirectionType getNextDirection(){
-		return this.nextDirection;
-	}
-
-	public void setNextDirection(DirectionType dir){
-		this.nextDirection = dir;
-	}
-
 	public void setMapPosition(Point pos){
 		this.setPosition(new PointF(pos.x * this.map.getGridUnitLength(), pos.y * this.map.getGridUnitLength()));
 	}
 
 	public Point getMapPosition(){
-		float x = this.getPosition().x / (this.getMap().getGridUnitLength());
-		float y = this.getPosition().y / (this.getMap().getGridUnitLength());
+		float x = this.getPosition().x / this.getMap().getGridUnitLength();
+		float y = this.getPosition().y / this.getMap().getGridUnitLength();
 
-		return new Point((int)x, (int)y);
+		return new Point((int)Math.floor(x), (int)Math.floor(y));
 	}
 
 	private void setPosition(PointF pos){
@@ -196,14 +187,6 @@ public abstract class Actor implements IActor {
 
 	public void setDirection(DirectionType dir){
 		this.direction = dir;
-	}
-
-	public void addDirection(DirectionType dir){
-		if (this.direction == DirectionType.None){
-			this.direction = dir;
-		} else {
-			this.nextDirection = dir;
-		}
 	}
 
 	public Point getInitialPosition() {
