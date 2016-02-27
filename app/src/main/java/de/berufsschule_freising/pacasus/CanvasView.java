@@ -55,10 +55,10 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 		pac = new Pacman(new Point(1,1), context.getAssets(), this.map);
 
 		this.ghostList = new ArrayList<>();
-		this.ghostList.add(GhostFactory.createBlinky(this.map, new Point(11, 16), context.getAssets()));
-		this.ghostList.add(GhostFactory.createClyde(this.map, new Point(11, 16), context.getAssets()));
-		this.ghostList.add(GhostFactory.createInky(this.map, new Point(11, 16), context.getAssets()));
-		this.ghostList.add(GhostFactory.createPinky(this.map, new Point(11, 16), context.getAssets()));
+		this.ghostList.add(GhostFactory.createBlinky(this.map, new Point(12, 15), context.getAssets()));
+		this.ghostList.add(GhostFactory.createClyde(this.map, new Point(13, 15), context.getAssets()));
+		this.ghostList.add(GhostFactory.createInky(this.map, new Point(12, 15), context.getAssets()));
+		this.ghostList.add(GhostFactory.createPinky(this.map, new Point(14, 15), context.getAssets()));
 	}
 
 	public boolean onTouchEvent(MotionEvent ev){

@@ -19,6 +19,7 @@ public abstract class Actor implements IActor {
 	private PointF position = new PointF();
 
 	private DirectionType direction = DirectionType.None;
+	private DirectionType nextDirection = DirectionType.None;
 
 	private AssetManager assetManager;
 
@@ -205,5 +206,20 @@ public abstract class Actor implements IActor {
 		this.assetManager = assetManager;
 	}
 
+	public void addDirection(DirectionType dir){
+		if (this.getDirection() == DirectionType.None){
+			this.setDirection(dir);
+		} else {
+			this.nextDirection = dir;
+		}
+	}
+
+	public DirectionType getNextDirection(){
+		return this.nextDirection;
+	}
+
+	public void setNextDirection(DirectionType dir){
+		this.nextDirection = dir;
+	}
 
 }

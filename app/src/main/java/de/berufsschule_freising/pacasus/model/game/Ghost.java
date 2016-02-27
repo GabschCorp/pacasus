@@ -101,12 +101,29 @@ public class Ghost extends Actor {
 
 	@Override
 	public void move() {
-		if(this.canWalk(this.getDirection())){
+		if (this.canWalk(this.getNextDirection()) && this.getNextDirection() != DirectionType.None){
+
+			this.setDirection(this.getNextDirection());
+			this.setNextDirection(DirectionType.None);
+
+
 			this.modifyPosition();
+		} else if (this.canWalk(this.getDirection()) && this.getDirection() != DirectionType.None){
+
+			this.modifyPosition();
+//
+//			Random random = new Random();
+//			int randomNum = random.nextInt((4 - 1) + 1) + 1;
+//			this.addDirection(DirectionType.fromOrdinal(randomNum));
+
 		} else {
+			this.setDirection(DirectionType.None);
+
 			Random random = new Random();
 			int randomNum = random.nextInt((4 - 1) + 1) + 1;
-			this.setDirection(DirectionType.fromOrdinal(randomNum));
+			this.addDirection(DirectionType.fromOrdinal(randomNum));
+			randomNum = random.nextInt((4 - 1) + 1) + 1;
+			this.addDirection(DirectionType.fromOrdinal(randomNum));
 		}
 	}
 
