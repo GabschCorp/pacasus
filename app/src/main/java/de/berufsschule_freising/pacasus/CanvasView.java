@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import de.berufsschule_freising.pacasus.model.game.DirectionType;
+import de.berufsschule_freising.pacasus.model.game.Engine;
 import de.berufsschule_freising.pacasus.model.game.GameState;
 import de.berufsschule_freising.pacasus.model.game.Ghost;
 import de.berufsschule_freising.pacasus.model.game.GhostFactory;
@@ -25,16 +26,7 @@ import de.berufsschule_freising.pacasus.model.game.Pacman;
 public class CanvasView extends View implements GestureDetector.OnGestureListener{
 
 	private GestureDetector gestureDetector;
-	private Pacman pac;
-
-	private List<Ghost> ghostList;
-
-	private Ghost blinky;
-	private Ghost inky;
-	private Ghost clyde;
-	private Ghost pinky;
-
-	private Map map;
+	private Engine engine;
 
 	public CanvasView(Activity context)
 	{
@@ -42,23 +34,8 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 		gestureDetector = new GestureDetector(context, this);
 		//TODO constructor
 
+		this.engine = new Engine(context.getAssets());
 
-		try {
-			this.map = new Map(context.getAssets());
-			this.map.parse();
-		} catch (IOException ex){
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		pac = new Pacman(new Point(1,1), context.getAssets(), this.map);
-
-		this.ghostList = new ArrayList<>();
-		this.ghostList.add(GhostFactory.createBlinky(this.map, new Point(12, 15), context.getAssets()));
-		this.ghostList.add(GhostFactory.createClyde(this.map, new Point(13, 15), context.getAssets()));
-		this.ghostList.add(GhostFactory.createInky(this.map, new Point(12, 15), context.getAssets()));
-		this.ghostList.add(GhostFactory.createPinky(this.map, new Point(14, 15), context.getAssets()));
 	}
 
 	public boolean onTouchEvent(MotionEvent ev){
@@ -71,26 +48,7 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		// TODO: Bessere Lösung für Gameloop finden
-		// Evtl mit GameTime
-		this.map.setCanvas(canvas);
-		this.pac.setCanvas(canvas);
-
-		this.map.render();
-
-		for (Ghost ghost : this.ghostList){
-			ghost.setCanvas(canvas);
-			ghost.render();
-
-			if (ghost.isIntersect(this.pac)){
-				if (GameState.getInstance().isEatable()){
-					this.pac.eatGhost(ghost);
-				} else {
-					this.pac.die();
-				}
-			}
-		}
-		this.pac.render();
+		this.engine.render(canvas);
 
 		try {
 			Thread.sleep(30);
@@ -119,15 +77,15 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 		if (Math.abs(distanceX) > Math.abs(distanceY)){
 			if (distanceX < 0){
-				this.pac.addDirection(DirectionType.Right);
+				this.engine.getPacman().addDirection(DirectionType.Right);
 			} else {
-				this.pac.addDirection(DirectionType.Left);
+				this.engine.getPacman().addDirection(DirectionType.Left);
 			}
 		} else {
 			if (distanceY < 0){
-				this.pac.addDirection(DirectionType.Down);
+				this.engine.getPacman().addDirection(DirectionType.Down);
 			} else {
-				this.pac.addDirection(DirectionType.Up);
+				this.engine.getPacman().addDirection(DirectionType.Up);
 			}
 		}
 
