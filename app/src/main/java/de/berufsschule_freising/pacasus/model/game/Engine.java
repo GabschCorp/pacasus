@@ -38,8 +38,11 @@ public class Engine {
 		this.ghostList.add(GhostFactory.createPinky(this.map, new Point(14, 15), am));
 	}
 
-	public void update(){
-
+	public void update() {
+		this.pacman.move();
+		for (Ghost ghost : this.ghostList) {
+			ghost.move();
+		}
 	}
 
 	public void render(Canvas canvas){

@@ -202,6 +202,6 @@ public class Pacman extends Actor {
 
 		canvas.drawBitmap(frame, this.getPosition().x, this.getPosition().y + 200, null);
 
-		this.move();
+		//this.move();
 	}
 }
