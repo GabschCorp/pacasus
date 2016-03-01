@@ -32,6 +32,7 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 	private Pacman pac;
 	private GameState state;
 	private List<Ghost> ghostList;
+	private Timer CatchTimer = new Timer();
 
 	private Ghost blinky;
 	private Ghost inky;
@@ -64,8 +65,8 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 				for (Ghost ghost : ghostList) {
 					ghost.setIsEatable(true);
 				}
-				Timer t = new Timer();
-				t.schedule(new TimerTask() {
+				CatchTimer.cancel();
+				CatchTimer.schedule(new TimerTask() {
 					@Override
 					public void run() {
 						stopEatable();
