@@ -14,6 +14,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import de.berufsschule_freising.pacasus.model.game.DirectionType;
+import de.berufsschule_freising.pacasus.model.game.Engine;
 import de.berufsschule_freising.pacasus.model.game.GameState;
 import de.berufsschule_freising.pacasus.model.game.Ghost;
 import de.berufsschule_freising.pacasus.model.game.GhostFactory;
@@ -29,66 +30,16 @@ import events.IEventHandler;
 public class CanvasView extends View implements GestureDetector.OnGestureListener{
 
 	private GestureDetector gestureDetector;
-	private Pacman pac;
-	private GameState state;
-	private List<Ghost> ghostList;
 
-	private Ghost blinky;
-	private Ghost inky;
-	private Ghost clyde;
-	private Ghost pinky;
-
-	private Map map;
+	private Engine engine;
 
 	public CanvasView(Activity context)
 	{
 		super(context);
-		gestureDetector = new GestureDetector(context, this);
-		//TODO constructor
-
-
-		try {
-			this.map = new Map(context.getAssets());
-			this.map.parse();
-		} catch (IOException ex){
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		pac = new Pacman(new Point(1,1), context.getAssets(), this.map);
-		pac.PacmanEatsPill.addHandler(new IEventHandler<PacmanEventArgs>() {
-			@Override
-			public void handle(Object sender, PacmanEventArgs args) {
-				state = GameState.Catch;
-				for (Ghost ghost : ghostList) {
-					ghost.setIsEatable(true);
-				}
-				Timer t = new Timer();
-				t.schedule(new TimerTask() {
-					@Override
-					public void run() {
-						stopEatable();
-					}
-				}, 10 * 1000); // 10 sec
-			}
-		});
-
-		this.ghostList = new ArrayList<>();
-		this.ghostList.add(GhostFactory.createBlinky(this.map, new Point(11, 16), context.getAssets()));
-		this.ghostList.add(GhostFactory.createClyde(this.map, new Point(11, 16), context.getAssets()));
-		this.ghostList.add(GhostFactory.createInky(this.map, new Point(11, 16), context.getAssets()));
-		this.ghostList.add(GhostFactory.createPinky(this.map, new Point(11, 16), context.getAssets()));
-
-		for (Ghost ghost : this.ghostList) {
-
-			//addevents
-		}
+		this.gestureDetector = new GestureDetector(context, this);
+		this.engine = new Engine(context.getAssets());
 	}
 
-	public void stopEatable(){
-		state = GameState.Run;
-	}
 
 	public boolean onTouchEvent(MotionEvent ev){
 		gestureDetector.onTouchEvent(ev);
@@ -100,26 +51,8 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		// TODO: Bessere Lösung für Gameloop finden
-		// Evtl mit GameTime
-		this.map.setCanvas(canvas);
-		this.pac.setCanvas(canvas);
-
-		this.map.render();
-
-		for (Ghost ghost : this.ghostList){
-			ghost.setCanvas(canvas);
-			ghost.render();
-
-			if (ghost.isIntersect(this.pac)){
-				if (state == GameState.Catch && ghost.getIsEatable() == true){
-					this.pac.eatGhost(ghost);
-				} else {
-					this.pac.die();
-				}
-			}
-		}
-		this.pac.render();
+		this.engine.update();
+		this.engine.render(canvas);
 
 		try {
 			Thread.sleep(30);
@@ -148,15 +81,15 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 		if (Math.abs(distanceX) > Math.abs(distanceY)){
 			if (distanceX < 0){
-				this.pac.addDirection(DirectionType.Right);
+				this.engine.getPacman().addDirection(DirectionType.Right);
 			} else {
-				this.pac.addDirection(DirectionType.Left);
+				this.engine.getPacman().addDirection(DirectionType.Left);
 			}
 		} else {
 			if (distanceY < 0){
-				this.pac.addDirection(DirectionType.Down);
+				this.engine.getPacman().addDirection(DirectionType.Down);
 			} else {
-				this.pac.addDirection(DirectionType.Up);
+				this.engine.getPacman().addDirection(DirectionType.Up);
 			}
 		}
 
