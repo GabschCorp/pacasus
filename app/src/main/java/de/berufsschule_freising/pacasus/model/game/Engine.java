@@ -23,6 +23,8 @@ public class Engine {
 	private List<Ghost> ghostList;
 	private Map map;
 
+	private Timer CatchTimer = new Timer();
+
 	private static final int EATABLE_DELAY = 10 * 1000;
 
 	public Engine(AssetManager am){
@@ -58,8 +60,9 @@ public class Engine {
 				for (Ghost ghost : ghostList) {
 					ghost.setIsEatable(true);
 				}
-				Timer t = new Timer();
-				t.schedule(new TimerTask() {
+
+				CatchTimer.cancel();
+				CatchTimer.schedule(new TimerTask() {
 					@Override
 					public void run() {
 						stopEatable();

@@ -2,30 +2,14 @@ package de.berufsschule_freising.pacasus;
 
 import android.app.Activity;
 import android.graphics.Canvas;
-import android.graphics.Point;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import de.berufsschule_freising.pacasus.model.game.DirectionType;
 import de.berufsschule_freising.pacasus.model.game.Engine;
-import de.berufsschule_freising.pacasus.model.game.GameState;
-import de.berufsschule_freising.pacasus.model.game.Ghost;
-import de.berufsschule_freising.pacasus.model.game.GhostFactory;
-import de.berufsschule_freising.pacasus.model.game.Map;
-import de.berufsschule_freising.pacasus.model.game.Pacman;
-
-import de.berufsschule_freising.pacasus.model.game.PacmanEventArgs;
-import events.IEventHandler;
 
 /**
- * Created by Gabriel on 22.10.2015.
+ * Created by Gabriel on 22.10.2015
  */
 public class CanvasView extends View implements GestureDetector.OnGestureListener{
 
