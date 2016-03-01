@@ -35,15 +35,9 @@ public class Ghost extends Actor {
 	private boolean isEatable;
 
 	public Ghost(){
-//		this.paint = new Paint();
-//		this.p
+
 	}
 
-
-//		Clyde Orange
-//		Inky blau
-//		Blinky Rot
-//		Pinky Pinky
 	public Ghost(String name, Point initialPosition, de.berufsschule_freising.pacasus.model.game.Map map, AssetManager am) {
 		this();
 

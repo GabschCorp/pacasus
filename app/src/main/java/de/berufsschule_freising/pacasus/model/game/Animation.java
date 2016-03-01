@@ -89,10 +89,6 @@ public class Animation {
 		}
 		Point frame = this.getFrameByNr(this.currentFrameNr);
 
-//		if (frame.x > this.getFrameWidth() || frame.y > this.getFrameHeight()){
-//			frame = this.getFrameByNr(this.currentFrameNr = startFrame);
-//		}
-
 		Matrix matrix = new Matrix();
 		matrix.postRotate(this.getRotation());
 
@@ -142,10 +138,6 @@ public class Animation {
 
 	public void setEndFrame(int end){
 		this.endFrame = end;
-	}
-
-	public void setSpriteSheet(Bitmap bmp){
-		//this.spriteSheet = bmp;
 	}
 
 	public float getSpritesheetWidth(){

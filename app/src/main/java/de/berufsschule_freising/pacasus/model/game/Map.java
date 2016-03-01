@@ -84,12 +84,6 @@ public class Map implements IDrawable {
                 this.charMap.add(this.charMap.size(), tmpList);
                 tmpList = new ArrayList<>();
 
-                // Dot
-//                if (c == '*'){
-//                    Log.w("Map-Dot", "found");
-//                    this.dotList.add(new Dot(this, new Point(tmpList.size() - 1, this.charMap.size() - 1)));
-//                }
-                // Pill
 
             }
         }
@@ -106,10 +100,6 @@ public class Map implements IDrawable {
             }
         }
 
-
-        // Compute Grid Unit Length
-        // CanvasWidth / AnzahlZeichenProZeile
-        //this.GridUnitLength = this.width / this.charMap.size();
         this.GridUnitLength = 30;
 
     }
@@ -150,10 +140,9 @@ public class Map implements IDrawable {
         matrix.postTranslate(0, 200);
 
         this.getCanvas().setMatrix(matrix);
-        //this.getCanvas().translate(0, 200);
-        //if (this.bitmapMap == null){
-            this.renderMap();
-        //}
+
+        this.renderMap();
+
 
         // RenderDots
         for (Dot d : this.dotList){
@@ -166,16 +155,11 @@ public class Map implements IDrawable {
             p.setCanvas(this.getCanvas());
             p.render();
         }
-
-        //this.canvas.drawBitmap(this.bitmapMap, 0, 200, null);
     }
 
     private void renderMap(){
         canvas = this.getCanvas();
         canvas.drawColor(Color.BLACK);
-//        Bitmap bmp = Bitmap.createBitmap((int)this.getGridUnitLength() * this.charMap.get(0).size(),
-//                (int)this.getGridUnitLength() * this.charMap.size(), Bitmap.Config.ARGB_8888);
-//        canvas = new Canvas(bmp);
 
         for (int rowIter = 0; rowIter < this.charMap.size(); rowIter++) { // row
             for (int columnIter = 0; columnIter < this.charMap.get(rowIter).size(); columnIter++) { // columns
@@ -234,13 +218,7 @@ public class Map implements IDrawable {
                 }
             }
         }
-
-        //this.bitmapMap = bmp;
     }
-
-//    private PointF getLine(int column, int row, boolean isHorizontal, boolean isOuter){
-//        float x =
-//    }
 
     private float getRightMapPoint(int rowOrColumn) {
         return rowOrColumn * this.GridUnitLength + this.GridUnitLength / 2;

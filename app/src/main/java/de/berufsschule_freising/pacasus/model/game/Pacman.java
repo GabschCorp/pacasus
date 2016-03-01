@@ -97,10 +97,6 @@ public class Pacman extends Actor {
 
 		int frameWidth = this.runAnimation.getFrameWidth();
 		this.setScaleFactor(this.getMap().getGridUnitLength() / frameWidth);
-				// 100 (pacframe ) = 302px
-				// x 			 = gridunitlegnt
-
-		//this.setResources(resources);
 
 		this.setInitialPosition(initialPosition);
 	}
@@ -139,7 +135,7 @@ public class Pacman extends Actor {
 		AbstractPoint dot;
 		if ((dot = this.getMap().getEatablePointByPosition(this.getMapPosition())) != null){
 			if (dot instanceof Pill){
-				//GameState.getInstance().startEatable();
+
 				PacmanEventArgs args = new PacmanEventArgs();
 				this.PacmanEatsPill.fire(this, args);
 			}
@@ -162,8 +158,7 @@ public class Pacman extends Actor {
 		}
 	}
 
-	//EatPillEvent
-
+	// TODO: EatPillEvent
 
 	private void modifyPosition(){
 		switch (this.getDirection()) {

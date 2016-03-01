@@ -70,7 +70,7 @@ public class Engine {
 
 		for (Ghost ghost : this.ghostList) {
 
-			//addevents
+			// TODO : addevents
 		}
 	}
 
