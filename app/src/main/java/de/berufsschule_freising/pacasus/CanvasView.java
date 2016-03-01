@@ -88,6 +88,9 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 
 	public void stopEatable(){
 		state = GameState.Run;
+		for (Ghost ghost : ghostList) {
+			ghost.setIsEatable(false);
+		}
 	}
 
 	public boolean onTouchEvent(MotionEvent ev){
