@@ -10,7 +10,8 @@ import android.view.View;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.berufsschule_freising.pacasus.model.game.DirectionType;
 import de.berufsschule_freising.pacasus.model.game.GameState;
@@ -19,6 +20,9 @@ import de.berufsschule_freising.pacasus.model.game.GhostFactory;
 import de.berufsschule_freising.pacasus.model.game.Map;
 import de.berufsschule_freising.pacasus.model.game.Pacman;
 
+import de.berufsschule_freising.pacasus.model.game.PacmanEventArgs;
+import events.IEventHandler;
+
 /**
  * Created by Gabriel on 22.10.2015.
  */
@@ -26,7 +30,7 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 
 	private GestureDetector gestureDetector;
 	private Pacman pac;
-
+	private GameState state;
 	private List<Ghost> ghostList;
 
 	private Ghost blinky;
@@ -53,12 +57,37 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 		}
 
 		pac = new Pacman(new Point(1,1), context.getAssets(), this.map);
+		pac.PacmanEatsPill.addHandler(new IEventHandler<PacmanEventArgs>() {
+			@Override
+			public void handle(Object sender, PacmanEventArgs args) {
+				state = GameState.Catch;
+				for (Ghost ghost : ghostList) {
+					ghost.setIsEatable(true);
+				}
+				Timer t = new Timer();
+				t.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						stopEatable();
+					}
+				}, 10 * 1000); // 10 sec
+			}
+		});
 
 		this.ghostList = new ArrayList<>();
-		this.ghostList.add(GhostFactory.createBlinky(this.map, new Point(12, 15), context.getAssets()));
-		this.ghostList.add(GhostFactory.createClyde(this.map, new Point(13, 15), context.getAssets()));
-		this.ghostList.add(GhostFactory.createInky(this.map, new Point(12, 15), context.getAssets()));
-		this.ghostList.add(GhostFactory.createPinky(this.map, new Point(14, 15), context.getAssets()));
+		this.ghostList.add(GhostFactory.createBlinky(this.map, new Point(11, 16), context.getAssets()));
+		this.ghostList.add(GhostFactory.createClyde(this.map, new Point(11, 16), context.getAssets()));
+		this.ghostList.add(GhostFactory.createInky(this.map, new Point(11, 16), context.getAssets()));
+		this.ghostList.add(GhostFactory.createPinky(this.map, new Point(11, 16), context.getAssets()));
+
+		for (Ghost ghost : this.ghostList) {
+
+			//addevents
+		}
+	}
+
+	public void stopEatable(){
+		state = GameState.Run;
 	}
 
 	public boolean onTouchEvent(MotionEvent ev){
@@ -83,7 +112,7 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 			ghost.render();
 
 			if (ghost.isIntersect(this.pac)){
-				if (GameState.getInstance().isEatable()){
+				if (state == GameState.Catch && ghost.getIsEatable() == true){
 					this.pac.eatGhost(ghost);
 				} else {
 					this.pac.die();

@@ -32,11 +32,18 @@ public class Ghost extends Actor {
 
 	private Animation eatableAnimation;
 
-	public Ghost(){
+	private boolean isEatable;
 
+	public Ghost(){
+//		this.paint = new Paint();
+//		this.p
 	}
 
 
+//		Clyde Orange
+//		Inky blau
+//		Blinky Rot
+//		Pinky Pinky
 	public Ghost(String name, Point initialPosition, de.berufsschule_freising.pacasus.model.game.Map map, AssetManager am) {
 		this();
 
@@ -61,7 +68,7 @@ public class Ghost extends Actor {
 		this.eatableAnimation.setEndFrame(32);
 
 		this.setDirection(DirectionType.Right);
-		//this.setNextDirection(DirectionType.Up);
+		this.setNextDirection(DirectionType.Left);
 
 		this.animationMap = new HashMap<>();
 	}
@@ -78,7 +85,7 @@ public class Ghost extends Actor {
 		this.eatableAnimation.setScaleWidth(this.getMap().getGridUnitLength());
 
 		Bitmap frame;
-		if (GameState.getInstance().isEatable()){
+		if (isEatable == true){
 			frame = this.eatableAnimation.createBitmapFrame();
 		} else {
 			frame = this.animationMap.get(this.getDirection()).createBitmapFrame();
@@ -101,29 +108,25 @@ public class Ghost extends Actor {
 
 	@Override
 	public void move() {
-		if (this.canWalk(this.getNextDirection()) && this.getNextDirection() != DirectionType.None){
+		if (this.canWalk(this.getNextDirection())) {// Kann in die nächste, angegebene Richtung laufen?
 
+			// Richtungen aktualisieren
 			this.setDirection(this.getNextDirection());
-			this.setNextDirection(DirectionType.None);
-
-
-			this.modifyPosition();
-		} else if (this.canWalk(this.getDirection()) && this.getDirection() != DirectionType.None){
-
-			this.modifyPosition();
-//
-//			Random random = new Random();
-//			int randomNum = random.nextInt((4 - 1) + 1) + 1;
-//			this.addDirection(DirectionType.fromOrdinal(randomNum));
-
-		} else {
-			this.setDirection(DirectionType.None);
-
 			Random random = new Random();
 			int randomNum = random.nextInt((4 - 1) + 1) + 1;
-			this.addDirection(DirectionType.fromOrdinal(randomNum));
+			this.setNextDirection(DirectionType.fromOrdinal(randomNum));
+
+			this.modifyPosition();
+
+		} else if(this.canWalk(this.getDirection())){ // Kann in die aktulle Richtung laufen?
+			this.modifyPosition();
+		} else {
+			Random random = new Random();
+			int randomNum = random.nextInt((4 - 1) + 1) + 1;
+			this.setDirection(DirectionType.fromOrdinal(randomNum));
 			randomNum = random.nextInt((4 - 1) + 1) + 1;
-			this.addDirection(DirectionType.fromOrdinal(randomNum));
+			this.setNextDirection(DirectionType.fromOrdinal(randomNum));
+			//this.move();
 		}
 	}
 
@@ -144,6 +147,14 @@ public class Ghost extends Actor {
 			case None :
 				break;
 		}
+	}
+
+	public boolean getIsEatable() {
+		return isEatable;
+	}
+
+	public void setIsEatable(boolean isEatable) {
+		this.isEatable = isEatable;
 	}
 
 	public Animation getDownAnimation() {

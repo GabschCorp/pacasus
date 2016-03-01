@@ -14,12 +14,18 @@ import android.util.Log;
 import java.io.IOException;
 import java.io.InputStream;
 
+import events.Event;
+import events.EventArgs;
+import events.IEvent;
+
 /**
  * Created by Julian on 21.10.2015.
  */
 
 // TODO:
 public class Pacman extends Actor {
+
+	public final IEvent<PacmanEventArgs> PacmanEatsPill = new Event<>();
 
 	// Game
 	private int lives;
@@ -29,6 +35,7 @@ public class Pacman extends Actor {
 	private final static int POINTS_DOT =  10;
 	private final static int POINTS_PILL = 100;
 	private final static int POINTS_GHOST = 1000;
+
 
 	private Paint paint;
 
@@ -100,7 +107,7 @@ public class Pacman extends Actor {
 
 	public void eatGhost(Ghost ghost){
 		ghost.setMapPosition(ghost.getInitialPosition());
-
+		ghost.setIsEatable(false);
 		this.points += Pacman.POINTS_GHOST;
 	}
 
@@ -132,7 +139,9 @@ public class Pacman extends Actor {
 		AbstractPoint dot;
 		if ((dot = this.getMap().getEatablePointByPosition(this.getMapPosition())) != null){
 			if (dot instanceof Pill){
-				GameState.getInstance().startEatable();
+				//GameState.getInstance().startEatable();
+				PacmanEventArgs args = new PacmanEventArgs();
+				this.PacmanEatsPill.fire(this, args);
 			}
 			dot.eat();
 		}
@@ -152,6 +161,9 @@ public class Pacman extends Actor {
 			this.setCurrentAnimation(this.stayAnimation);
 		}
 	}
+
+	//EatPillEvent
+
 
 	private void modifyPosition(){
 		switch (this.getDirection()) {
@@ -204,4 +216,5 @@ public class Pacman extends Actor {
 
 		this.move();
 	}
+
 }
