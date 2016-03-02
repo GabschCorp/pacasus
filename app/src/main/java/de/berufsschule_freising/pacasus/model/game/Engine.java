@@ -62,12 +62,16 @@ public class Engine {
 				}
 
 				CatchTimer.cancel();
-				CatchTimer.schedule(new TimerTask() {
-					@Override
-					public void run() {
-						stopEatable();
-					}
-				}, Engine.EATABLE_DELAY); // 10 sec
+				try {
+					CatchTimer.schedule(new TimerTask() {
+						@Override
+						public void run() {
+							stopEatable();
+						}
+					}, Engine.EATABLE_DELAY); // 10 sec
+				} catch (IllegalStateException e){
+
+				}
 			}
 		});
 
