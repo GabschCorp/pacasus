@@ -12,6 +12,7 @@ public class GameActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		//setContentView(R.layout.activity_game);
 		setContentView(new CanvasView(this));
+		getActionBar().hide();
 	}
 
 	@Override

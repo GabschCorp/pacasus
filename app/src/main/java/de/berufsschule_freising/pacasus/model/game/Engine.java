@@ -23,7 +23,8 @@ public class Engine {
 	private List<Ghost> ghostList;
 	private Map map;
 
-	private Timer CatchTimer = new Timer();
+	private Timer catchTimer = new Timer();
+	private boolean isCatchTimerRunning = false;
 
 	private static final int EATABLE_DELAY = 10 * 1000;
 
@@ -60,13 +61,21 @@ public class Engine {
 				for (Ghost ghost : ghostList) {
 					ghost.setIsEatable(true);
 				}
-
-				CatchTimer.cancel();
 				try {
-					CatchTimer.schedule(new TimerTask() {
+					catchTimer.schedule(new TimerTask() {
 						@Override
 						public void run() {
-							stopEatable();
+							if(isCatchTimerRunning == false) {
+								stopEatable();
+								isCatchTimerRunning = true;
+							}
+							else{
+								catchTimer.cancel();
+								catchTimer.purge();
+								stopEatable();
+								isCatchTimerRunning = true;
+
+							}
 						}
 					}, Engine.EATABLE_DELAY); // 10 sec
 				} catch (IllegalStateException e){
@@ -83,6 +92,10 @@ public class Engine {
 
 	public void stopEatable(){
 		state = GameState.Run;
+		for (Ghost ghost : ghostList) {
+			ghost.setIsEatable(false);
+		}
+		isCatchTimerRunning = false;
 	}
 
 	public void update(){
