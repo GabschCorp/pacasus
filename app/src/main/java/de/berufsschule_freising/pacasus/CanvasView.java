@@ -31,7 +31,7 @@ import de.berufsschule_freising.pacasus.model.game.RenderingThread;
  * Created by Gabriel on 22.10.2015.
  */
 // GestureDetector.OnGestureListener,
-public class CanvasView extends SurfaceView implements  SurfaceHolder.Callback {
+public class CanvasView extends SurfaceView implements GestureDetector.OnGestureListener, SurfaceHolder.Callback {
 
 	private GestureDetector gestureDetector;
 	private Engine engine;
@@ -43,7 +43,7 @@ public class CanvasView extends SurfaceView implements  SurfaceHolder.Callback {
 	public CanvasView(Activity context)
 	{
 		super(context);
-		//gestureDetector = new GestureDetector(context, this);
+		gestureDetector = new GestureDetector(context, this);
 
 		this.initView();
 		this.paint = new Paint();
@@ -92,11 +92,11 @@ public class CanvasView extends SurfaceView implements  SurfaceHolder.Callback {
 	}
 
 
-//	public boolean onTouchEvent(MotionEvent ev){
-//		//gestureDetector.onTouchEvent(ev);
-//
-//		return true;
-//	}
+	public boolean onTouchEvent(MotionEvent ev){
+		gestureDetector.onTouchEvent(ev);
+
+		return true;
+	}
 
 //
 //		try {
@@ -107,47 +107,47 @@ public class CanvasView extends SurfaceView implements  SurfaceHolder.Callback {
 //		this.invalidate();
 //	}
 
-//	@Override
-//	public boolean onDown(MotionEvent e) {
-//		return false;
-//	}
-//
-//	@Override
-//	public void onShowPress(MotionEvent e) {
-//
-//	}
-//
-//	@Override
-//	public boolean onSingleTapUp(MotionEvent e) {
-//		return false;
-//	}
-//
-//	@Override
-//	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-//		if (Math.abs(distanceX) > Math.abs(distanceY)){
-//			if (distanceX < 0){
-//				this.engine.getPacman().addDirection(DirectionType.Right);
-//			} else {
-//				this.engine.getPacman().addDirection(DirectionType.Left);
-//			}
-//		} else {
-//			if (distanceY < 0){
-//				this.engine.getPacman().addDirection(DirectionType.Down);
-//			} else {
-//				this.engine.getPacman().addDirection(DirectionType.Up);
-//			}
-//		}
-//
-//		return true;
-//	}
-//
-//	@Override
-//	public void onLongPress(MotionEvent e) {
-//
-//	}
-//
-//	@Override
-//	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-//		return false;
-//	}
+	@Override
+	public boolean onDown(MotionEvent e) {
+		return false;
+	}
+
+	@Override
+	public void onShowPress(MotionEvent e) {
+
+	}
+
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
+		return false;
+	}
+
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+		if (Math.abs(distanceX) > Math.abs(distanceY)){
+			if (distanceX < 0){
+				this.engine.getPacman().addDirection(DirectionType.Right);
+			} else {
+				this.engine.getPacman().addDirection(DirectionType.Left);
+			}
+		} else {
+			if (distanceY < 0){
+				this.engine.getPacman().addDirection(DirectionType.Down);
+			} else {
+				this.engine.getPacman().addDirection(DirectionType.Up);
+			}
+		}
+
+		return true;
+	}
+
+	@Override
+	public void onLongPress(MotionEvent e) {
+
+	}
+
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+		return false;
+	}
 }

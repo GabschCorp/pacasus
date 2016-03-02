@@ -2,6 +2,7 @@ package de.berufsschule_freising.pacasus.model.game;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -34,6 +35,10 @@ public class RenderingThread extends Thread {
 
 	@Override
 	public void run(){
+		Paint p = new Paint();
+		p.setColor(Color.RED);
+		p.setStyle(Paint.Style.FILL_AND_STROKE);
+
 		while (this.isRunning){
 			if (!this.surfaceHolder.getSurface().isValid()){
 				continue;
@@ -47,7 +52,11 @@ public class RenderingThread extends Thread {
 			if (canvas != null){
 				synchronized (this.surfaceHolder){
 					Log.w("RenderingThread", "isRendering");
+
+					//canvas.drawRect(10,10,100,100, p);
 					canvas.drawColor(Color.CYAN);
+
+					this.engine.render(canvas);
 				}
 				this.surfaceHolder.unlockCanvasAndPost(canvas);
 			}
