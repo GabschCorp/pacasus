@@ -61,16 +61,7 @@ public class Pacman extends Actor {
 
 		this.setSpeed(map.getGridUnitLength() / 4);
 
-		InputStream spriteSheetInputStream;
-		Bitmap spriteSheet = null;
-		try {
-			spriteSheetInputStream = this.getAssetManager().open("pacman_characters.png");
-			spriteSheet = BitmapFactory.decodeStream(spriteSheetInputStream);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		this.stayAnimation = new Animation(spriteSheet);
+		this.stayAnimation = new Animation(this.getSpritesheet());
 		this.stayAnimation.setColumns(8);
 		this.stayAnimation.setRows(8);
 		this.stayAnimation.setEndFrame(0);
@@ -78,17 +69,17 @@ public class Pacman extends Actor {
 
 		this.setCurrentAnimation(stayAnimation);
 
-		this.runAnimation = new Animation(spriteSheet);
+		this.runAnimation = new Animation(this.getSpritesheet());
 		this.runAnimation.setColumns(8);
 		this.runAnimation.setRows(8);
 		this.runAnimation.setEndFrame(4);
 		this.runAnimation.setStartFrame(0);
 
-		this.dieAnimation = new Animation(spriteSheet);
+		this.dieAnimation = new Animation(this.getSpritesheet());
 		this.dieAnimation.setColumns(8);
 		this.dieAnimation.setRows(8);
-		this.dieAnimation.setEndFrame(24);
-		this.dieAnimation.setStartFrame(20);
+		this.dieAnimation.setEndFrame(8);
+		this.dieAnimation.setStartFrame(1);
 
 		int frameWidth = this.runAnimation.getFrameWidth();
 		this.setScaleFactor(this.getMap().getGridUnitLength() / frameWidth);
