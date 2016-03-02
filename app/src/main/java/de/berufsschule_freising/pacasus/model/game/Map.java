@@ -24,16 +24,12 @@ public class Map implements IDrawable {
     private String filePath;
     private AssetManager assetManager;
 
-    private Bitmap bitmapMap = null;
-
     private List<Dot> dotList = new ArrayList<>();
     private List<Pill> pillList = new ArrayList<>();
 
     private int thickness;
 
     private Paint paint;
-    private Color backgroundColor;
-    private Color foregroundColor;
 
     // TODO: Const Wand-offset; Wand abflachen
     private float wallOffsetPercentage = 0.5f;
@@ -136,13 +132,7 @@ public class Map implements IDrawable {
             throw new RuntimeException("Canvas must be set");
         }
 
-        Matrix matrix = new Matrix();
-        matrix.postTranslate(0, 200);
-
-        this.getCanvas().setMatrix(matrix);
-
         this.renderMap();
-
 
         // RenderDots
         for (Dot d : this.dotList){
@@ -184,7 +174,7 @@ public class Map implements IDrawable {
                     case '╚':
                         canvas.drawArc(getLeftMapPoint(column) + this.getWallOffset(),
                                 getLeftMapPoint(row) - this.getWallOffset(),
-                                getRightMapPoint(column),
+                                getRightMapPoint(column) + this.getWallOffset(),
                                 getRightMapPoint(row) - this.getWallOffset(), 90f, 90f, false, this.paint);
                         break;
                     case '╝':

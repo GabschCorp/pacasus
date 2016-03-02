@@ -2,11 +2,8 @@ package de.berufsschule_freising.pacasus.model.game;
 
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Created by Julian on 02.03.2016.
@@ -45,6 +42,4 @@ abstract public class Drawable implements IDrawable {
 	public Bitmap getSpritesheet(){
 		return this.spritesheet;
 	}
-
-
 }

@@ -7,12 +7,14 @@ import android.view.MenuItem;
 
 public class GameActivity extends Activity {
 
+	private CanvasView canvasView;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//setContentView(R.layout.activity_game);
-		setContentView(new CanvasView(this));
-		getActionBar().hide();
+		this.canvasView = new CanvasView(this);
+		setContentView(canvasView);
 	}
 
 	@Override

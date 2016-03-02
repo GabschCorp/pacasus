@@ -30,22 +30,32 @@ public class Dot extends AbstractPoint {
 	}
 
 	@Override
+	public PointF getPositionByMapPosition(){
+		PointF position = new PointF();
+		position.x = this.getMap().getGridUnitLength() * this.getMapPosition().x;
+		position.y = this.getMap().getGridUnitLength() * this.getMapPosition().y;
+
+		return position;
+	}
+
+
+	@Override
 	public void render() {
 		if (!this.isEaten()) {
 
-			//PointF drawingPosition = this.getPositionByMapPosition();
+			PointF drawingPosition = this.getPositionByMapPosition();
 
 			this.dotFrame.setScaleHeight(this.getMap().getGridUnitLength());
 			this.dotFrame.setScaleWidth(this.getMap().getGridUnitLength());
 
 			this.getCanvas().setMatrix(new Matrix());
 
-			// TODO : vom Asset rendern
-			this.getCanvas().drawBitmap(this.dotFrame.createBitmapFrame(),
-					this.getPositionByMapPosition().x,
-					this.getPositionByMapPosition().y + 200, null);
+//			// TODO : vom Asset rendern
+//			this.getCanvas().drawBitmap(this.dotFrame.createBitmapFrame(),
+//					this.getPositionByMapPosition().x,
+//					this.getPositionByMapPosition().y + 200, null);
 
-			//this.getCanvas().drawArc(drawingPosition.x - 7, drawingPosition.y - 7 + 200, drawingPosition.x + 7, drawingPosition.y + 7 + 200, 0, 360, true, this.getPaint());
+			this.getCanvas().drawArc(drawingPosition.x - 1, drawingPosition.y - 1, drawingPosition.x + 1, drawingPosition.y + 1, 0, 360, true, this.getPaint());
 		}
 	}
 

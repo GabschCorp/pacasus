@@ -50,7 +50,7 @@ public class Pill extends AbstractPoint implements IDrawable{
 			// TODO : vom Asset rendern
 			this.getCanvas().drawBitmap(this.pillFrame.createBitmapFrame(),
 				this.getPositionByMapPosition().x,
-				this.getPositionByMapPosition().y + 200, null);
+				this.getPositionByMapPosition().y, null);
 
 			//this.getCanvas().drawArc(drawingPosition.x - 7, drawingPosition.y - 7 + 200, drawingPosition.x + 7, drawingPosition.y + 7 + 200, 0, 360, true, this.getPaint());
 		}

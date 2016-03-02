@@ -38,20 +38,13 @@ public class Engine {
 			e.printStackTrace();
 		}
 
-		try {
-			this.map = new Map(am);
-			this.map.parse();
-		} catch (IOException ex){
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		pacman = new Pacman(new Point(1,1), am, this.map);
 
 		this.ghostList = new ArrayList<>();
-		this.ghostList.add(GhostFactory.createBlinky(this.map, new Point(11, 16), am));
-		this.ghostList.add(GhostFactory.createClyde(this.map, new Point(11, 16), am));
-		this.ghostList.add(GhostFactory.createInky(this.map, new Point(11, 16), am));
-		this.ghostList.add(GhostFactory.createPinky(this.map, new Point(11, 16), am));
+		this.ghostList.add(GhostFactory.createBlinky(this.map, new Point(12, 15), am));
+		this.ghostList.add(GhostFactory.createClyde(this.map, new Point(13, 15), am));
+//		this.ghostList.add(GhostFactory.createInky(this.map, new Point(14, 15), am));
+//		this.ghostList.add(GhostFactory.createPinky(this.map, new Point(12, 15), am));
 
 		this.pacman = new Pacman(new Point(1,1), am, this.map);
 		this.pacman.PacmanEatsPill.addHandler(new IEventHandler<PacmanEventArgs>() {
@@ -99,24 +92,10 @@ public class Engine {
 	}
 
 	public void update(){
-		/* TODO:
-		 * Move
-		 * CollisionDetection ...
-		 */
+		this.pacman.move();
 
-	}
-
-	public void render(Canvas canvas){
-		// TODO: Bessere Lösung für Gameloop finden
-		// Evtl mit GameTime
-		this.map.setCanvas(canvas);
-		this.pacman.setCanvas(canvas);
-
-		this.map.render();
-
-		for (Ghost ghost : this.ghostList){
-			ghost.setCanvas(canvas);
-			ghost.render();
+		for (Ghost ghost : this.ghostList) {
+			ghost.move();
 
 			if (ghost.isIntersect(this.pacman)){
 				if (state == GameState.Catch && ghost.getIsEatable() == true){
@@ -125,6 +104,19 @@ public class Engine {
 					this.pacman.die();
 				}
 			}
+
+		}
+	}
+
+	public void render(Canvas canvas){
+		this.map.setCanvas(canvas);
+		this.pacman.setCanvas(canvas);
+
+		this.map.render();
+
+		for (Ghost ghost : this.ghostList){
+			ghost.setCanvas(canvas);
+			ghost.render();
 		}
 		this.pacman.render();
 	}
