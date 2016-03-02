@@ -9,7 +9,7 @@ import android.graphics.PointF;
 /**
  * Created by Julian on 21.10.2015.
  */
-public abstract class Actor implements IActor {
+public abstract class Actor extends Drawable implements IActor {
 
 	private int id;
 	private String name;
@@ -32,22 +32,8 @@ public abstract class Actor implements IActor {
 	private Map map;
 	private float scaleFactor;
 
-	public Actor()
-	{
-		this.id = 0;
-		this.name = "";
-	}
-
-	public Actor(String name, Canvas canvas)
-	{
-		this.name = name;
-		this.canvas = canvas;
-	}
-
-	public Actor(int id, String name, Canvas canvas)
-	{
-		this(name, canvas);
-		this.id = id;
+	public Actor(AssetManager am) {
+		super(am);
 	}
 
 	public boolean isIntersect(Actor actor){

@@ -39,7 +39,7 @@ public class CanvasView extends View implements GestureDetector.OnGestureListene
 		this.engine.render(canvas);
 
 		try {
-			Thread.sleep(30);
+			Thread.sleep(0);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -92,7 +92,7 @@ public class Map implements IDrawable {
         for (int i = 0; i < this.charMap.size(); i++) { // row
             for (int j = 0; j < this.charMap.get(i).size(); j++) { // columns
                 if (this.charMap.get(i).get(j) == '*') {
-                    this.dotList.add(new Dot(this, new Point(j+1, i+1)));
+                    this.dotList.add(new Dot(this, new Point(j+1, i+1), this.assetManager));
                 }
                 if (this.charMap.get(i).get(j) == 'p') {
                     this.pillList.add(new Pill(this, new Point(j+1, i+1), this.assetManager));

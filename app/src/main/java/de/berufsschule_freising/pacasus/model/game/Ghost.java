@@ -34,12 +34,9 @@ public class Ghost extends Actor {
 
 	private boolean isEatable;
 
-	public Ghost(){
-
-	}
 
 	public Ghost(String name, Point initialPosition, de.berufsschule_freising.pacasus.model.game.Map map, AssetManager am) {
-		this();
+		super(am);
 
 		this.setName(name);
 		this.setMap(map);

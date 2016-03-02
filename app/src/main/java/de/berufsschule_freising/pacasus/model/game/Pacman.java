@@ -45,8 +45,8 @@ public class Pacman extends Actor {
 	private Animation runAnimation;
 	private Animation dieAnimation;
 
-	public Pacman(){
-		super();
+	public Pacman(Point initialPosition, AssetManager am, Map map){
+		super(am);
 
 		this.lives = 3;
 		this.points = 0;
@@ -56,13 +56,8 @@ public class Pacman extends Actor {
 		this.paint = new Paint();
 		this.paint.setStyle(Paint.Style.FILL);
 		this.paint.setColor(Color.YELLOW);
-	}
-
-	public Pacman(Point initialPosition, AssetManager am, Map map){
-		this();
 
 		this.setMap(map);
-		this.setAssetManager(am);
 
 		this.setSpeed(map.getGridUnitLength() / 4);
 
