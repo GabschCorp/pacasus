@@ -98,12 +98,16 @@ public class Engine {
 			ghost.move();
 
 			// Kollisionserkennung
-			if (ghost.isIntersect(this.pacman)){
+			if (CollisionDetection.isIntersecting(this.pacman, ghost, this.map.getGridUnitLength())){
+				// Pacman auf Pillen
 				if (state == GameState.Catch && ghost.getIsEatable() == true){
 					this.pacman.eatGhost(ghost);
-				} else {
+				} else { // Pacman stirbt
 					this.pacman.die();
 				}
+
+			}
+			if (ghost.isIntersect(this.pacman)){
 			}
 		}
 	}

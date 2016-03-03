@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.util.Log;
 
 /**
  * Created by Julian on 21.10.2015.
@@ -23,8 +24,6 @@ public abstract class Actor extends Drawable implements IActor {
 	private AssetManager assetManager;
 
 	private float speed = 10;
-
-	private Resources resources;
 
 	private Animation currentAnimation;
 
@@ -47,6 +46,8 @@ public abstract class Actor extends Drawable implements IActor {
 
 
 	public boolean canWalk(DirectionType dir){
+
+		// return !CollisionDetection.isIntersecting(this, this.getMap());
 		Point mapPos = this.getMapPosition();
 
 		if (DirectionType.Up == dir){
@@ -62,33 +63,48 @@ public abstract class Actor extends Drawable implements IActor {
 			mapPos.x--;
 		}
 
-		// TODO: Richtung plus/minus 1
+		// Grobe Prüfung
+		// Ist Weg
 		char tmp;
 		tmp = this.getMap().getCharAtPoint(mapPos);
 		if (Character.isWhitespace(tmp) ||
 				tmp == '*' ||
 				tmp == 'p'){
-
-
 			return true;
+		} else {
+			//Log.w("Actor", String.valueOf(tmp));
+
+			// Genaue Prüfung
+			// Entfernung zum Stein
+			PointF charPos = this.getPositionByMapPosition(mapPos);
+			Log.w("Actor", "X:" + charPos.x + " Y:" + charPos.y);
+			if (Math.abs(charPos.x - this.getPosition().x) >= this.getMap().getGridUnitLength() ||
+					Math.abs(charPos.y - this.getPosition().y) >= this.getMap().getGridUnitLength()){
+				return true;
+			}
 		}
+
 		return false;
 	}
-	
+
+	// TODO: Helper Method
+	public PointF getPositionByMapPosition(Point mapPos){
+		PointF position = new PointF();
+		position.x = this.getMap().getGridUnitLength() * mapPos.x;
+		position.y = this.getMap().getGridUnitLength() * mapPos.y;
+
+		position.x -= this.getMap().getGridUnitLength() / 2;
+		position.y -= this.getMap().getGridUnitLength() / 2;
+
+		return position;
+	}
+
 	@Override
 	public abstract void clear();
 
 	public abstract void move();
 
 	public abstract void render();
-
-	public Resources getResources() {
-		return resources;
-	}
-
-	public void setResources(Resources resources) {
-		this.resources = resources;
-	}
 
 	public int getID() {
 		return id;
@@ -112,6 +128,12 @@ public abstract class Actor extends Drawable implements IActor {
 
 	public void setMap(Map map) {
 		this.map = map;
+
+		this.computeSpeed();
+	}
+
+	private void computeSpeed(){
+		this.speed = this.getMap().getGridUnitLength() / 4;
 	}
 
 	public Animation getCurrentAnimation() {
@@ -138,7 +160,6 @@ public abstract class Actor extends Drawable implements IActor {
 		this.scaleFactor = scaleFactor;
 	}
 
-
 	public PointF getPosition(){
 		return this.position;
 	}
@@ -158,7 +179,7 @@ public abstract class Actor extends Drawable implements IActor {
 		return new Point((int)Math.floor(x), (int)Math.floor(y));
 	}
 
-	private void setPosition(PointF pos){
+	public void setPosition(PointF pos){
 		this.position = pos;
 	}
 

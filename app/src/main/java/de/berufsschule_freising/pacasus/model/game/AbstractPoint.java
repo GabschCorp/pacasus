@@ -28,6 +28,12 @@ public abstract class AbstractPoint extends Drawable{
 		this.setMapPosition(mapPosition);
 	}
 
+	public void eat(){
+		this.isEaten = true;
+
+		this.getMap().removeDotFromList(this);
+	}
+
 	public PointF getPositionByMapPosition(){
 		PointF position = new PointF();
 		position.x = this.getMap().getGridUnitLength() * this.getMapPosition().x;
@@ -39,10 +45,8 @@ public abstract class AbstractPoint extends Drawable{
 		return position;
 	}
 
-	public void eat(){
-		this.isEaten = true;
-
-		this.getMap().removeDotFromList(this);
+	public PointF getPosition(){
+		return this.getPositionByMapPosition();
 	}
 
 	public Point getMapPosition() {

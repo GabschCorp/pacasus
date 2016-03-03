@@ -21,21 +21,15 @@ import java.util.List;
 public class Map implements IDrawable {
 
     private Canvas canvas = null;
-    private String filePath;
     private AssetManager assetManager;
 
     private List<Dot> dotList = new ArrayList<>();
     private List<Pill> pillList = new ArrayList<>();
 
-    private int thickness;
-
     private Paint paint;
 
     // TODO: Const Wand-offset; Wand abflachen
     private float wallOffsetPercentage = 0.5f;
-
-    private int width;
-    private int height;
 
     private InputStream io;
 
@@ -100,14 +94,6 @@ public class Map implements IDrawable {
 
     }
 
-    public void setWidth(int width)  {
-        this.width = width;
-    }
-
-    public void setHeight(int height){
-        this.height = height;
-    }
-
     public Canvas getCanvas(){
         return this.canvas;
     }
@@ -116,14 +102,6 @@ public class Map implements IDrawable {
         this.canvas = canvas;
         this.GridUnitLength = this.getCanvas().getWidth() / this.charMap.get(0).size();
 
-    }
-
-    public String getFilePath(){
-        return this.filePath;
-    }
-
-    public void setFilePath(String filePath){
-        this.filePath = filePath;
     }
 
     @Override

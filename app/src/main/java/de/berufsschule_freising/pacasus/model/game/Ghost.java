@@ -74,8 +74,6 @@ public class Ghost extends Actor {
 
 	@Override
 	public void move() {
-		Log.w("Ghost:" + this.getName(), this.getDirection().toString());
-
 		// Erstes zeichnen; Kartenposition setzen
 		if (this.getPosition().x == 0){
 			this.setMapPosition(this.getInitialPosition());

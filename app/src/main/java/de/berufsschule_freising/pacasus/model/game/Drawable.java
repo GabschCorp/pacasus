@@ -3,6 +3,7 @@ package de.berufsschule_freising.pacasus.model.game;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.PointF;
 
 
 /**
@@ -42,4 +43,7 @@ abstract public class Drawable implements IDrawable {
 	public Bitmap getSpritesheet(){
 		return this.spritesheet;
 	}
+
+	abstract PointF getPosition();
+
 }

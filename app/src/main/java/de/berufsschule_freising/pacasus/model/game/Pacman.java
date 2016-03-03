@@ -171,6 +171,7 @@ public class Pacman extends Actor {
 		}
 	}
 
+
 	@Override
 	public void clear() {
 		this.getCanvas().drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
