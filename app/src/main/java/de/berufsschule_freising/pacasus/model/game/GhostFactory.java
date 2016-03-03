@@ -21,16 +21,7 @@ public class GhostFactory {
 	public static Ghost createBlinky(Map map, Point initialPosition, AssetManager am){
 		Ghost blinky = new Ghost("blinky", initialPosition, map, am);
 
-		InputStream spriteSheetInputStream;
-		Bitmap spriteSheet = null;
-		try {
-			spriteSheetInputStream = blinky.getAssetManager().open("pacman_characters.png");
-			spriteSheet = BitmapFactory.decodeStream(spriteSheetInputStream);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		Animation anim = new Animation(spriteSheet);
+		Animation anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(36);
@@ -38,7 +29,7 @@ public class GhostFactory {
 
 		blinky.getAnimationMap().put(DirectionType.Down, anim);
 
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(34);
@@ -46,8 +37,7 @@ public class GhostFactory {
 
 		blinky.getAnimationMap().put(DirectionType.Right, anim);
 
-
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(32);
@@ -55,7 +45,7 @@ public class GhostFactory {
 
 		blinky.getAnimationMap().put(DirectionType.Up, anim);
 
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(38);
@@ -63,7 +53,7 @@ public class GhostFactory {
 
 		blinky.getAnimationMap().put(DirectionType.Left, anim);
 
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(38);
@@ -77,16 +67,7 @@ public class GhostFactory {
 	public static Ghost createInky(Map map, Point initialPosition, AssetManager am){
 		Ghost inky = new Ghost("inky", initialPosition, map, am);
 
-		InputStream spriteSheetInputStream;
-		Bitmap spriteSheet = null;
-		try {
-			spriteSheetInputStream = inky.getAssetManager().open("pacman_characters.png");
-			spriteSheet = BitmapFactory.decodeStream(spriteSheetInputStream);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		Animation anim = new Animation(spriteSheet);
+		Animation anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(52);
@@ -94,7 +75,7 @@ public class GhostFactory {
 
 		inky.getAnimationMap().put(DirectionType.Down, anim);
 
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(50);
@@ -103,7 +84,7 @@ public class GhostFactory {
 		inky.getAnimationMap().put(DirectionType.Right, anim);
 
 
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(48);
@@ -111,7 +92,7 @@ public class GhostFactory {
 
 		inky.getAnimationMap().put(DirectionType.Up, anim);
 
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(54);
@@ -119,7 +100,7 @@ public class GhostFactory {
 
 		inky.getAnimationMap().put(DirectionType.Left, anim);
 
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(38);
@@ -133,16 +114,7 @@ public class GhostFactory {
 	public static Ghost createClyde(Map map, Point initialPosition, AssetManager am){
 		Ghost clyde = new Ghost("clyde", initialPosition, map, am);
 
-		InputStream spriteSheetInputStream;
-		Bitmap spriteSheet = null;
-		try {
-			spriteSheetInputStream = clyde.getAssetManager().open("pacman_characters.png");
-			spriteSheet = BitmapFactory.decodeStream(spriteSheetInputStream);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		Animation anim = new Animation(spriteSheet);
+		Animation anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(44);
@@ -150,7 +122,7 @@ public class GhostFactory {
 
 		clyde.getAnimationMap().put(DirectionType.Down, anim);
 
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(42);
@@ -159,7 +131,7 @@ public class GhostFactory {
 		clyde.getAnimationMap().put(DirectionType.Right, anim);
 
 
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(40);
@@ -167,7 +139,7 @@ public class GhostFactory {
 
 		clyde.getAnimationMap().put(DirectionType.Up, anim);
 
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(46);
@@ -175,7 +147,7 @@ public class GhostFactory {
 
 		clyde.getAnimationMap().put(DirectionType.Left, anim);
 
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(38);
@@ -189,16 +161,7 @@ public class GhostFactory {
 	public static Ghost createPinky(Map map, Point initialPosition, AssetManager am){
 		Ghost pinky = new Ghost("blinky", initialPosition, map, am);
 
-		InputStream spriteSheetInputStream;
-		Bitmap spriteSheet = null;
-		try {
-			spriteSheetInputStream = pinky.getAssetManager().open("pacman_characters.png");
-			spriteSheet = BitmapFactory.decodeStream(spriteSheetInputStream);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		Animation anim = new Animation(spriteSheet);
+		Animation anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(60);
@@ -206,7 +169,7 @@ public class GhostFactory {
 
 		pinky.getAnimationMap().put(DirectionType.Down, anim);
 
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(58);
@@ -215,7 +178,7 @@ public class GhostFactory {
 		pinky.getAnimationMap().put(DirectionType.Right, anim);
 
 
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(56);
@@ -223,7 +186,7 @@ public class GhostFactory {
 
 		pinky.getAnimationMap().put(DirectionType.Up, anim);
 
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(62);
@@ -231,7 +194,7 @@ public class GhostFactory {
 
 		pinky.getAnimationMap().put(DirectionType.Left, anim);
 
-		anim = new Animation(spriteSheet);
+		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
 		anim.setStartFrame(38);
