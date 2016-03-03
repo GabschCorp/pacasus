@@ -48,8 +48,6 @@ public class Animation {
 		int row = (int)Math.floor(nr / this.columns);
 		int column = nr - row * this.columns;
 
-
-
 		if (nr >= startFrame && nr <= this.endFrame){
 			return new Point(column * this.getFrameWidth(), row  * this.getFrameHeight());
 			//return new PointF(column * 70, row * 70);

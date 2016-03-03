@@ -83,7 +83,6 @@ public class GhostFactory {
 
 		inky.getAnimationMap().put(DirectionType.Right, anim);
 
-
 		anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);
 		anim.setRows(8);
@@ -159,7 +158,7 @@ public class GhostFactory {
 	}
 
 	public static Ghost createPinky(Map map, Point initialPosition, AssetManager am){
-		Ghost pinky = new Ghost("blinky", initialPosition, map, am);
+		Ghost pinky = new Ghost("pinky", initialPosition, map, am);
 
 		Animation anim = new Animation(ResourceRegistry.getInstance().getSpritesheet(am));
 		anim.setColumns(8);

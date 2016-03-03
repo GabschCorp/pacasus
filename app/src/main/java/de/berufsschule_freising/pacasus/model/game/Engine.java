@@ -3,6 +3,7 @@ package de.berufsschule_freising.pacasus.model.game;
 import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,15 +39,14 @@ public class Engine {
 			e.printStackTrace();
 		}
 
-		pacman = new Pacman(new Point(1,1), am, this.map);
+		this.pacman = new Pacman(new Point(1,1), am, this.map);
 
 		this.ghostList = new ArrayList<>();
 		this.ghostList.add(GhostFactory.createBlinky(this.map, new Point(12, 15), am));
 		this.ghostList.add(GhostFactory.createClyde(this.map, new Point(13, 15), am));
-//		this.ghostList.add(GhostFactory.createInky(this.map, new Point(14, 15), am));
-//		this.ghostList.add(GhostFactory.createPinky(this.map, new Point(12, 15), am));
+		this.ghostList.add(GhostFactory.createInky(this.map, new Point(14, 15), am));
+		this.ghostList.add(GhostFactory.createPinky(this.map, new Point(12, 15), am));
 
-		this.pacman = new Pacman(new Point(1,1), am, this.map);
 		this.pacman.PacmanEatsPill.addHandler(new IEventHandler<PacmanEventArgs>() {
 			@Override
 			public void handle(Object sender, PacmanEventArgs args) {
@@ -62,7 +62,7 @@ public class Engine {
 								stopEatable();
 								isCatchTimerRunning = true;
 							}
-							else{
+							else {
 								catchTimer.cancel();
 								catchTimer.purge();
 								stopEatable();
@@ -97,6 +97,7 @@ public class Engine {
 		for (Ghost ghost : this.ghostList) {
 			ghost.move();
 
+			// Kollisionserkennung
 			if (ghost.isIntersect(this.pacman)){
 				if (state == GameState.Catch && ghost.getIsEatable() == true){
 					this.pacman.eatGhost(ghost);
@@ -104,7 +105,6 @@ public class Engine {
 					this.pacman.die();
 				}
 			}
-
 		}
 	}
 

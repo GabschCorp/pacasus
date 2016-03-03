@@ -24,42 +24,26 @@ public class Ghost extends Actor {
 
 	private HashMap<DirectionType, Animation> animationMap;
 
-	private Animation rightAnimation;
-
-	private Animation topAnimation;
-	private Animation leftAnimation;
-	private Animation downAnimation;
-
 	private Animation eatableAnimation;
 
 	private boolean isEatable;
 
 
-	public Ghost(String name, Point initialPosition, de.berufsschule_freising.pacasus.model.game.Map map, AssetManager am) {
+	public Ghost(String name, Point initialPosition, Map map, AssetManager am) {
 		super(am);
 
 		this.setName(name);
 		this.setMap(map);
 		this.setInitialPosition(initialPosition);
-		this.setAssetManager(am);
 
-		InputStream spriteSheetInputStream;
-		Bitmap spriteSheet = null;
-		try {
-			spriteSheetInputStream = this.getAssetManager().open("pacman_characters.png");
-			spriteSheet = BitmapFactory.decodeStream(spriteSheetInputStream);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		this.eatableAnimation = new Animation(spriteSheet);
+		this.eatableAnimation = new Animation(this.getSpritesheet());
 		this.eatableAnimation.setColumns(8);
 		this.eatableAnimation.setRows(8);
 		this.eatableAnimation.setStartFrame(30);
 		this.eatableAnimation.setEndFrame(32);
 
 		this.setDirection(DirectionType.Right);
-		this.setNextDirection(DirectionType.Left);
+		this.setNextDirection(DirectionType.Up);
 
 		this.animationMap = new HashMap<>();
 	}
@@ -67,8 +51,6 @@ public class Ghost extends Actor {
 	@Override
 	public void render() {
 		Canvas canvas = this.getCanvas();
-
-		canvas.setMatrix(new Matrix());
 
 		this.animationMap.get(this.getDirection()).setScaleHeight(this.getMap().getGridUnitLength());
 		this.animationMap.get(this.getDirection()).setScaleWidth(this.getMap().getGridUnitLength());
@@ -82,14 +64,7 @@ public class Ghost extends Actor {
 			frame = this.animationMap.get(this.getDirection()).createBitmapFrame();
 		}
 
-		// Erstes zeichnen; Kartenposition setzen
-		if (this.getPosition().x == 0){
-			this.setMapPosition(this.getInitialPosition());
-		}
-
 		canvas.drawBitmap(frame, this.getPosition().x, this.getPosition().y, null);
-
-		//this.move();
 	}
 
 	@Override
@@ -99,17 +74,22 @@ public class Ghost extends Actor {
 
 	@Override
 	public void move() {
-		if (this.canWalk(this.getNextDirection())) {// Kann in die nächste, angegebene Richtung laufen?
+		Log.w("Ghost:" + this.getName(), this.getDirection().toString());
+
+		// Erstes zeichnen; Kartenposition setzen
+		if (this.getPosition().x == 0){
+			this.setMapPosition(this.getInitialPosition());
+		}
+
+		if (this.canWalk(this.getNextDirection()) && this.getNextDirection() != DirectionType.None) {// Kann in die nächste, angegebene Richtung laufen?
 
 			// Richtungen aktualisieren
 			this.setDirection(this.getNextDirection());
-			Random random = new Random();
-			int randomNum = random.nextInt((4 - 1) + 1) + 1;
-			this.setNextDirection(DirectionType.fromOrdinal(randomNum));
+			this.setNextDirection(DirectionType.None);
 
 			this.modifyPosition();
 
-		} else if(this.canWalk(this.getDirection())){ // Kann in die aktulle Richtung laufen?
+		} else if(this.canWalk(this.getDirection()) && this.getDirection() != DirectionType.None){ // Kann in die aktulle Richtung laufen?
 			this.modifyPosition();
 		} else {
 			Random random = new Random();
@@ -117,7 +97,6 @@ public class Ghost extends Actor {
 			this.setDirection(DirectionType.fromOrdinal(randomNum));
 			randomNum = random.nextInt((4 - 1) + 1) + 1;
 			this.setNextDirection(DirectionType.fromOrdinal(randomNum));
-			//this.move();
 		}
 	}
 
@@ -146,38 +125,6 @@ public class Ghost extends Actor {
 
 	public void setIsEatable(boolean isEatable) {
 		this.isEatable = isEatable;
-	}
-
-	public Animation getDownAnimation() {
-		return downAnimation;
-	}
-
-	public void setDownAnimation(Animation downAnimation) {
-		this.downAnimation = downAnimation;
-	}
-
-	public Animation getRightAnimation() {
-		return rightAnimation;
-	}
-
-	public void setRightAnimation(Animation rightAnimation) {
-		this.rightAnimation = rightAnimation;
-	}
-
-	public Animation getTopAnimation() {
-		return topAnimation;
-	}
-
-	public void setTopAnimation(Animation topAnimation) {
-		this.topAnimation = topAnimation;
-	}
-
-	public Animation getLeftAnimation() {
-		return leftAnimation;
-	}
-
-	public void setLeftAnimation(Animation leftAnimation) {
-		this.leftAnimation = leftAnimation;
 	}
 
 	public HashMap<DirectionType, Animation> getAnimationMap() {

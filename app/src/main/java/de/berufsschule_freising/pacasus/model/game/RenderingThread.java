@@ -23,7 +23,7 @@ public class RenderingThread extends Thread {
 	private Engine engine;
 	private CanvasView view;
 
-	private static final int DELAY = 30;
+	private static final int DELAY = 20;
 
 	public RenderingThread(SurfaceHolder surfaceHolder, Engine engine, CanvasView view){
 		super();
@@ -44,10 +44,9 @@ public class RenderingThread extends Thread {
 				continue;
 			}
 
-			//Log.w("RenderingThread", "isRunning");
 			this.engine.update();
 
-			Canvas canvas = this.surfaceHolder.lockCanvas(null);
+			Canvas canvas = this.surfaceHolder.lockCanvas();
 
 			if (canvas != null){
 				synchronized (this.surfaceHolder){

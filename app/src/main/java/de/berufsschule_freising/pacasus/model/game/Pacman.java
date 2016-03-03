@@ -33,8 +33,8 @@ public class Pacman extends Actor {
 
 	// TODO: Zahlen eruieren
 	private final static int POINTS_DOT =  10;
-	private final static int POINTS_PILL = 100;
-	private final static int POINTS_GHOST = 1000;
+	private final static int POINTS_PILL = 50;
+	private final static int POINTS_GHOST = 100;
 
 
 	private Paint paint;
@@ -118,6 +118,7 @@ public class Pacman extends Actor {
 	@Override
 	public void move() {
 		// pillen essen
+		// TODO: In Engine
 		AbstractPoint dot;
 		if ((dot = this.getMap().getEatablePointByPosition(this.getMapPosition())) != null){
 			if (dot instanceof Pill){
@@ -128,7 +129,8 @@ public class Pacman extends Actor {
 			dot.eat();
 		}
 
-		if (this.canWalk(this.getNextDirection()) && this.getNextDirection() != DirectionType.None) {// Kann in die nächste, angegebene Richtung laufen?
+		// Kann in die nächste, angegebene Richtung laufen?
+		if (this.canWalk(this.getNextDirection()) && this.getNextDirection() != DirectionType.None) {
 
 			// Richtungen aktualisieren
 			this.setDirection(this.getNextDirection());
@@ -178,8 +180,8 @@ public class Pacman extends Actor {
 	public void render(){
 
 		Canvas canvas = this.getCanvas();
-		Matrix oMat = new Matrix();
-		canvas.setMatrix(oMat);
+//		Matrix oMat = new Matrix();
+//		canvas.setMatrix(oMat);
 
 		this.getCurrentAnimation().setScaleHeight(this.getMap().getGridUnitLength());
 		this.getCurrentAnimation().setScaleWidth(this.getMap().getGridUnitLength());
@@ -194,8 +196,5 @@ public class Pacman extends Actor {
 		}
 
 		canvas.drawBitmap(frame, this.getPosition().x, this.getPosition().y, null);
-
-		//this.move();
 	}
-
 }

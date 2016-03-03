@@ -79,7 +79,10 @@ public class CanvasView extends SurfaceView implements GestureDetector.OnGesture
 
 	public void surfaceChanged(SurfaceHolder surfaceHolder, int format, int width, int height){
 		Log.w("CanvasView", "surfaceChanged");
-
+		if (!this.renderingThread.isRunning()){
+			this.renderingThread.setIsRunning(true);
+			this.renderingThread.start();
+		}
 	}
 
 	public void surfaceDestroyed(SurfaceHolder surfaceHolder){
@@ -90,6 +93,7 @@ public class CanvasView extends SurfaceView implements GestureDetector.OnGesture
 			try {
 				this.renderingThread.join();
 				retry = false;
+				this.renderingThread.setIsRunning(false);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -102,15 +106,6 @@ public class CanvasView extends SurfaceView implements GestureDetector.OnGesture
 
 		return true;
 	}
-
-//
-//		try {
-//			Thread.sleep(30);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//		this.invalidate();
-//	}
 
 	@Override
 	public boolean onDown(MotionEvent e) {

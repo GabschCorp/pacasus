@@ -22,7 +22,7 @@ public abstract class Actor extends Drawable implements IActor {
 
 	private AssetManager assetManager;
 
-	private float speed = 01;
+	private float speed = 10;
 
 	private Resources resources;
 
