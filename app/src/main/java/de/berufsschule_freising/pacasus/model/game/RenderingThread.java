@@ -23,7 +23,7 @@ public class RenderingThread extends Thread {
 	private Engine engine;
 	private CanvasView view;
 
-	private static final int DELAY = 20;
+	private static final int DELAY = 10;
 
 	public RenderingThread(SurfaceHolder surfaceHolder, Engine engine, CanvasView view){
 		super();
@@ -40,6 +40,8 @@ public class RenderingThread extends Thread {
 		p.setStyle(Paint.Style.FILL_AND_STROKE);
 
 		while (this.isRunning){
+			long begin = System.currentTimeMillis() / 1000;
+
 			if (!this.surfaceHolder.getSurface().isValid()){
 				continue;
 			}
@@ -56,7 +58,8 @@ public class RenderingThread extends Thread {
 			}
 
 			try {
-				this.sleep(this.DELAY);
+				long end = System.currentTimeMillis() / 1000;
+				this.sleep(this.DELAY - (end - begin));
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
