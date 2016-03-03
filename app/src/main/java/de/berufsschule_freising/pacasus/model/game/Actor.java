@@ -13,7 +13,6 @@ public abstract class Actor extends Drawable implements IActor {
 
 	private int id;
 	private String name;
-	private Canvas canvas;
 
 	private Point initialPosition;
 	private PointF position = new PointF();
@@ -23,7 +22,7 @@ public abstract class Actor extends Drawable implements IActor {
 
 	private AssetManager assetManager;
 
-	private float speed = 10;
+	private float speed = 01;
 
 	private Resources resources;
 
@@ -45,8 +44,6 @@ public abstract class Actor extends Drawable implements IActor {
 
 		return false;
 	}
-
-	// public abstract boolean isIntersect(Actor actor);
 
 
 	public boolean canWalk(DirectionType dir){
@@ -141,13 +138,6 @@ public abstract class Actor extends Drawable implements IActor {
 		this.scaleFactor = scaleFactor;
 	}
 
-	public Canvas getCanvas(){
-		return this.canvas;
-	}
-
-	public void setCanvas(Canvas canvas){
-		this.canvas = canvas;
-	}
 
 	public PointF getPosition(){
 		return this.position;

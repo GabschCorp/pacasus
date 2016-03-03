@@ -16,7 +16,6 @@ public abstract class AbstractPoint extends Drawable{
 	private Paint paint = new Paint();
 
 	private Point mapPosition;
-	private Canvas canvas;
 
 	private boolean isEaten = false;
 
@@ -60,14 +59,6 @@ public abstract class AbstractPoint extends Drawable{
 
 	public void setMap(Map map) {
 		this.map = map;
-	}
-
-	public void setCanvas(Canvas canvas) {
-		this.canvas = canvas;
-	}
-
-	public Canvas getCanvas() {
-		return this.canvas;
 	}
 
 	public Paint getPaint() {
