@@ -13,8 +13,7 @@ public enum GameState {
 	Run,
 	Catch,
 	Over,
-	Normal, // geister bunt
-	Eatable, // geister blau
+	Win
 }
 
 

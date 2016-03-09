@@ -26,6 +26,8 @@ import events.IEvent;
 public class Pacman extends Actor {
 
 	public final IEvent<PacmanEventArgs> PacmanEatsPill = new Event<>();
+	public final IEvent<PacmanEventArgs> PacmanEatsDot = new Event<>();
+	public final IEvent<PacmanEventArgs> PacmanDies = new Event<>();
 
 	// Game
 	private int lives;
@@ -33,13 +35,14 @@ public class Pacman extends Actor {
 
 	// TODO: Zahlen eruieren
 	private final static int POINTS_DOT =  10;
-	private final static int POINTS_PILL = 100;
-	private final static int POINTS_GHOST = 1000;
+	private final static int POINTS_PILL = 50;
+	private final static int POINTS_GHOST = 100;
+	private final static int POINTS_FRUIT = 300;
 
 
 	private Paint paint;
 
-	// initialMapPosition;
+	private Point initialMapPosition;
 
 	private Animation stayAnimation;
 	private Animation runAnimation;
@@ -98,7 +101,8 @@ public class Pacman extends Actor {
 		int frameWidth = this.runAnimation.getFrameWidth();
 		this.setScaleFactor(this.getMap().getGridUnitLength() / frameWidth);
 
-		this.setInitialPosition(initialPosition);
+		initialMapPosition = initialPosition;
+		this.setInitialPosition(initialMapPosition);
 	}
 
 	public void eatGhost(Ghost ghost){
@@ -119,10 +123,13 @@ public class Pacman extends Actor {
 
 	public void die(){
 		this.lives--;
-
+		PacmanEventArgs args = new PacmanEventArgs();
+		args.Lives = this.lives;
+		args.Points = this.points;
+		this.PacmanDies.fire(this, args);
 		this.setCurrentAnimation(this.dieAnimation);
 		this.setDirection(DirectionType.None);
-
+		this.setMapPosition(initialMapPosition);
 		// stop game
 		// run die animation
 		// reset game
@@ -132,14 +139,25 @@ public class Pacman extends Actor {
 	@Override
 	public void move() {
 		// pillen essen
-		AbstractPoint dot;
-		if ((dot = this.getMap().getEatablePointByPosition(this.getMapPosition())) != null){
-			if (dot instanceof Pill){
+		AbstractPoint point;
+		if ((point = this.getMap().getEatablePointByPosition(this.getMapPosition())) != null){
+			this.eatDot(point);
+			if (point instanceof Pill){
 
 				PacmanEventArgs args = new PacmanEventArgs();
+				args.Lives = this.lives;
+				args.Points = this.points;
+				args.EatenDot = point;
 				this.PacmanEatsPill.fire(this, args);
 			}
-			dot.eat();
+			else
+			{
+				PacmanEventArgs args = new PacmanEventArgs();
+				args.Lives = this.lives;
+				args.Points = this.points;
+				args.EatenDot = point;
+				this.PacmanEatsDot.fire(this, args);
+			}
 		}
 
 		if (this.canWalk(this.getNextDirection()) && this.getNextDirection() != DirectionType.None) {// Kann in die nächste, angegebene Richtung laufen?

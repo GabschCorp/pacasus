@@ -6,4 +6,7 @@ import events.EventArgs;
  * Created by Gabriel on 28.02.2016.
  */
 public class PacmanEventArgs extends EventArgs {
+	public int Lives;
+	public int Points;
+	public AbstractPoint EatenDot;
 }
