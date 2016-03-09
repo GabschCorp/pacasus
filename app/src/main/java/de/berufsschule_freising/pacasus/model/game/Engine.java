@@ -2,8 +2,9 @@ package de.berufsschule_freising.pacasus.model.game;
 
 import android.content.res.AssetManager;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Point;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,9 +19,14 @@ import events.IEventHandler;
  */
 public class Engine {
 
-	private GameState state;
+	private GameState state = GameState.Run;
+	private int actualScore = 0;
+	private int actualLives = 3;
 
 	private Pacman pacman;
+	private static final int PACMAN_SPAWN_X = 1;
+	private static final int PACMAN_SPAWN_Y = 1;
+
 	private List<Ghost> ghostList;
 	private Map map;
 
@@ -38,15 +44,14 @@ public class Engine {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		this.pacman = new Pacman(new Point(1,1), am, this.map);
-
+		
 		this.ghostList = new ArrayList<>();
 		this.ghostList.add(GhostFactory.createBlinky(this.map, new Point(12, 15), am));
 		this.ghostList.add(GhostFactory.createClyde(this.map, new Point(13, 15), am));
 		this.ghostList.add(GhostFactory.createInky(this.map, new Point(14, 15), am));
 		this.ghostList.add(GhostFactory.createPinky(this.map, new Point(12, 15), am));
 
+		this.pacman = new Pacman(new Point(PACMAN_SPAWN_X,PACMAN_SPAWN_Y), am, this.map);
 		this.pacman.PacmanEatsPill.addHandler(new IEventHandler<PacmanEventArgs>() {
 			@Override
 			public void handle(Object sender, PacmanEventArgs args) {
@@ -62,7 +67,7 @@ public class Engine {
 								stopEatable();
 								isCatchTimerRunning = true;
 							}
-							else {
+							else{
 								catchTimer.cancel();
 								catchTimer.purge();
 								stopEatable();
@@ -73,6 +78,35 @@ public class Engine {
 					}, Engine.EATABLE_DELAY); // 10 sec
 				} catch (IllegalStateException e){
 
+				}
+				if(args.EatenDot != null && args.EatenDot instanceof Dot) {
+					removeDotFromList((Dot) args.EatenDot);
+					if(map.getDotList().size() == 0){
+						state = GameState.Win;
+					}
+				}
+
+				//TODO:Wenn die Lezzte Pille gegessen wurde -> Win!
+			}
+		});
+
+		this.pacman.PacmanEatsDot.addHandler(new IEventHandler<PacmanEventArgs>() {
+			@Override
+			public void handle(Object sender, PacmanEventArgs args) {
+				actualScore = args.Points;
+				actualLives = args.Lives;
+			}
+		});
+
+		this.pacman.PacmanDies.addHandler(new IEventHandler<PacmanEventArgs>() {
+			@Override
+			public void handle(Object sender, PacmanEventArgs args) {
+				actualScore = args.Points;
+				actualLives = args.Lives;
+
+				if(actualLives == 0)
+				{
+					state = GameState.Over;
 				}
 			}
 		});
@@ -93,7 +127,7 @@ public class Engine {
 
 	public void update(){
 		this.pacman.move();
-
+		
 		for (Ghost ghost : this.ghostList) {
 			ghost.move();
 
@@ -112,17 +146,60 @@ public class Engine {
 		}
 	}
 
-	public void render(Canvas canvas){
+	public void render(Canvas canvas) {
 		this.map.setCanvas(canvas);
 		this.pacman.setCanvas(canvas);
 
 		this.map.render();
 
-		for (Ghost ghost : this.ghostList){
+		// TODO: raus
+		Paint textPaint = new Paint();
+		textPaint.setColor(Color.YELLOW);
+		textPaint.setStyle(Paint.Style.STROKE);
+		textPaint.setTextSize(50);
+
+		switch (this.state) {
+			case Run:
+			case Catch: {
+				for (Ghost ghost : this.ghostList) {
+					ghost.setCanvas(canvas);
+					ghost.render();
+
+					if (ghost.isIntersect(this.pacman)) {
+						if (this.state == GameState.Catch && ghost.getIsEatable() == true) {
+							this.pacman.eatGhost(ghost);
+						} else {
+							this.pacman.die();
+						}
+					}
+				}
+				this.pacman.render();
+				break;
+			}
+			case Over: {
+				canvas.drawText(String.format("Game Over", actualScore, actualLives), 250, 525, textPaint);
+				break;
+			}
+			case Win: {
+				canvas.drawText(String.format("You Won", actualScore, actualLives), 250, 525, textPaint);
+				break;
+			}
+			default: {
+				break;
+			}
+		}
+
+
+		for (Ghost ghost : this.ghostList) {
 			ghost.setCanvas(canvas);
 			ghost.render();
 		}
-		this.pacman.render();
+
+		canvas.drawText(String.format("Punkte: %d | Leben: %d", actualScore, actualLives), 25, 200, textPaint);
+	}
+
+	public void removeDotFromList(Dot dot){
+		this.map.getDotList().remove(dot);
 	}
 
 	public Pacman getPacman(){

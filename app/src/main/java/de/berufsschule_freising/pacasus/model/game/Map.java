@@ -12,6 +12,7 @@ import android.graphics.PorterDuff;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -243,5 +244,9 @@ public class Map implements IDrawable {
         } else {
             this.dotList.remove(this.dotList.indexOf(dot));
         }
+    }
+
+    public List<Dot> getDotList(){
+        return this.dotList;
     }
 }
