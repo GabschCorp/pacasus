@@ -174,11 +174,11 @@ public class Engine {
 				break;
 			}
 			case Over:{
-				canvas.drawText(String.format("Game Over", actualScore, actualLives), 250, 525, textPaint);
+				canvas.drawText(String.format("Game Over", actualScore, actualLives), canvas.getWidth() / 2 - 125, canvas.getHeight() / 2, textPaint);
 				break;
 			}
 			case Win:{
-				canvas.drawText(String.format("You Won", actualScore, actualLives), 250, 525, textPaint);
+				canvas.drawText(String.format("You Won", actualScore, actualLives), canvas.getWidth() / 2 -125, canvas.getHeight() / 2, textPaint);
 				break;
 			}
 			default:{
