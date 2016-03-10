@@ -42,8 +42,6 @@ public class Pacman extends Actor {
 
 	private Paint paint;
 
-	private Point initialMapPosition;
-
 	private Animation stayAnimation;
 	private Animation runAnimation;
 	private Animation dieAnimation;
@@ -114,7 +112,7 @@ public class Pacman extends Actor {
 		this.PacmanDies.fire(this, args);
 		this.setCurrentAnimation(this.dieAnimation);
 		this.setDirection(DirectionType.None);
-		this.setMapPosition(this.initialMapPosition);
+		this.setMapPosition(this.getInitialPosition());
 		// stop game
 		// run die animation
 		// reset game

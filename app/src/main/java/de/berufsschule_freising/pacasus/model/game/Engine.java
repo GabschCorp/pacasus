@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.Matrix;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,10 +47,10 @@ public class Engine {
 		}
 		
 		this.ghostList = new ArrayList<>();
-		this.ghostList.add(GhostFactory.createBlinky(this.map, new Point(12, 15), am));
-		this.ghostList.add(GhostFactory.createClyde(this.map, new Point(13, 15), am));
-		this.ghostList.add(GhostFactory.createInky(this.map, new Point(14, 15), am));
-		this.ghostList.add(GhostFactory.createPinky(this.map, new Point(12, 15), am));
+		this.ghostList.add(GhostFactory.createBlinky(this.map, new Point(10, 12), am));
+		this.ghostList.add(GhostFactory.createClyde(this.map, new Point(11, 12), am));
+		this.ghostList.add(GhostFactory.createInky(this.map, new Point(12, 12), am));
+		this.ghostList.add(GhostFactory.createPinky(this.map, new Point(11, 12), am));
 
 		this.pacman = new Pacman(new Point(PACMAN_SPAWN_X,PACMAN_SPAWN_Y), am, this.map);
 		this.pacman.PacmanEatsPill.addHandler(new IEventHandler<PacmanEventArgs>() {
@@ -79,12 +80,7 @@ public class Engine {
 				} catch (IllegalStateException e){
 
 				}
-				if(args.EatenDot != null && args.EatenDot instanceof Dot) {
-					removeDotFromList((Dot) args.EatenDot);
-					if(map.getDotList().size() == 0){
-						state = GameState.Win;
-					}
-				}
+
 
 				//TODO:Wenn die Lezzte Pille gegessen wurde -> Win!
 			}
@@ -95,6 +91,12 @@ public class Engine {
 			public void handle(Object sender, PacmanEventArgs args) {
 				actualScore = args.Points;
 				actualLives = args.Lives;
+				if(args.EatenDot != null && args.EatenDot instanceof Dot) {
+					removeDotFromList((Dot) args.EatenDot);
+					if(map.getDotList().size() == 0){
+						state = GameState.Win;
+					}
+				}
 			}
 		});
 
@@ -112,7 +114,6 @@ public class Engine {
 		});
 
 		for (Ghost ghost : this.ghostList) {
-
 			// TODO : addevents
 		}
 	}
@@ -125,7 +126,7 @@ public class Engine {
 		isCatchTimerRunning = false;
 	}
 
-	public void update(){
+	public void update() {
 		this.pacman.move();
 		
 		for (Ghost ghost : this.ghostList) {
@@ -139,9 +140,6 @@ public class Engine {
 				} else { // Pacman stirbt
 					this.pacman.die();
 				}
-
-			}
-			if (ghost.isIntersect(this.pacman)){
 			}
 		}
 	}
@@ -150,12 +148,16 @@ public class Engine {
 		this.map.setCanvas(canvas);
 		this.pacman.setCanvas(canvas);
 
+
+		Matrix matrix = new Matrix();
+		matrix.setTranslate(0, 200);
+		canvas.setMatrix(matrix);
 		this.map.render();
 
 		// TODO: raus
 		Paint textPaint = new Paint();
 		textPaint.setColor(Color.YELLOW);
-		textPaint.setStyle(Paint.Style.STROKE);
+		textPaint.setStyle(Paint.Style.FILL_AND_STROKE);
 		textPaint.setTextSize(50);
 
 		switch (this.state) {
@@ -195,7 +197,7 @@ public class Engine {
 			ghost.render();
 		}
 
-		canvas.drawText(String.format("Punkte: %d | Leben: %d", actualScore, actualLives), 25, 200, textPaint);
+		canvas.drawText(String.format("Punkte: %d | Leben: %d", actualScore, actualLives), 25, 0, textPaint);
 	}
 
 	public void removeDotFromList(Dot dot){

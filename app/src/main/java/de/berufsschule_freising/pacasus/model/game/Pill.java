@@ -45,8 +45,6 @@ public class Pill extends AbstractPoint implements IDrawable{
 			this.pillFrame.setScaleHeight(this.getMap().getGridUnitLength());
 			this.pillFrame.setScaleWidth(this.getMap().getGridUnitLength());
 
-			this.getCanvas().setMatrix(new Matrix());
-
 			// TODO : vom Asset rendern
 			this.getCanvas().drawBitmap(this.pillFrame.createBitmapFrame(),
 				this.getPositionByMapPosition().x,

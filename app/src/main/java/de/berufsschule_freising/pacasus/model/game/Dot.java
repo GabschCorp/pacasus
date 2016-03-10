@@ -54,7 +54,9 @@ public class Dot extends AbstractPoint {
 //			this.getCanvas().drawBitmap(this.dotFrame.createBitmapFrame(),
 //					this.getPositionByMapPosition().x,
 //					this.getPositionByMapPosition().y + 200, null);
-
+			Matrix matrix = new Matrix();
+			matrix.setTranslate(0, 200);
+			this.getCanvas().setMatrix(matrix);
 			this.getCanvas().drawArc(drawingPosition.x - 1, drawingPosition.y - 1, drawingPosition.x + 1, drawingPosition.y + 1, 0, 360, true, this.getPaint());
 		}
 	}

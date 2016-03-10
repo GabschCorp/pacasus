@@ -76,12 +76,12 @@ public abstract class Actor extends Drawable implements IActor {
 
 			// Genaue Prüfung
 			// Entfernung zum Stein
-			PointF charPos = this.getPositionByMapPosition(mapPos);
-			Log.w("Actor", "X:" + charPos.x + " Y:" + charPos.y);
-			if (Math.abs(charPos.x - this.getPosition().x) >= this.getMap().getGridUnitLength() ||
-					Math.abs(charPos.y - this.getPosition().y) >= this.getMap().getGridUnitLength()){
-				return true;
-			}
+//			PointF charPos = this.getPositionByMapPosition(mapPos);
+//			Log.w("Actor", "X:" + charPos.x + " Y:" + charPos.y);
+//			if (Math.abs(charPos.x - this.getPosition().x) >= this.getMap().getGridUnitLength() ||
+//					Math.abs(charPos.y - this.getPosition().y) >= this.getMap().getGridUnitLength()){
+//				return true;
+//			}
 		}
 
 		return false;
